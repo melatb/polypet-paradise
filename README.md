@@ -4,6 +4,10 @@ A pet-raising math game for Grade 6. Solving problems takes care of your pet's n
 
 Math content is based on [Illustrative Mathematics 6–8 Math v.360](https://illustrativemathematics.org/) (CC BY-NC 4.0), so this project must stay non-commercial.
 
+## Play it
+
+https://melatb.github.io/polypet-paradise/ (rebuilt automatically on every push to `main`).
+
 ## Run it
 
 ```bash
