@@ -69,8 +69,8 @@ export function PetArt({ species: sp, stage, look, animated = false, className }
   switch (sp.kind) {
     case 'pup':
       front = <>
-        <ellipse cx={46} cy={fy - 6} rx={14} ry={28} fill={d} stroke={O} strokeWidth={4} transform={`rotate(18 46 ${fy - 6})`} className="pet-ear-l" />
-        <ellipse cx={154} cy={fy - 6} rx={14} ry={28} fill={d} stroke={O} strokeWidth={4} transform={`rotate(-18 154 ${fy - 6})`} className="pet-ear-r" />
+        <g className="pet-ear-l"><ellipse cx={46} cy={fy - 6} rx={14} ry={28} fill={d} stroke={O} strokeWidth={4} transform={`rotate(18 46 ${fy - 6})`} /></g>
+        <g className="pet-ear-r"><ellipse cx={154} cy={fy - 6} rx={14} ry={28} fill={d} stroke={O} strokeWidth={4} transform={`rotate(-18 154 ${fy - 6})`} /></g>
         <ellipse cx={100} cy={fy + 8} rx={7} ry={5} fill={O} />
       </>
       break
@@ -107,8 +107,8 @@ export function PetArt({ species: sp, stage, look, animated = false, className }
       break
     case 'penguin':
       back = <>
-        <ellipse className="pet-wing-l" cx={38} cy={fy + 22} rx={14} ry={30} fill={d} stroke={O} strokeWidth={4} transform={`rotate(25 38 ${fy + 22})`} />
-        <ellipse className="pet-wing-r" cx={162} cy={fy + 22} rx={14} ry={30} fill={d} stroke={O} strokeWidth={4} transform={`rotate(-25 162 ${fy + 22})`} />
+        <g className="pet-wing-l"><ellipse cx={38} cy={fy + 22} rx={14} ry={30} fill={d} stroke={O} strokeWidth={4} transform={`rotate(25 38 ${fy + 22})`} /></g>
+        <g className="pet-wing-r"><ellipse cx={162} cy={fy + 22} rx={14} ry={30} fill={d} stroke={O} strokeWidth={4} transform={`rotate(-25 162 ${fy + 22})`} /></g>
       </>
       front = <ellipse cx={100} cy={fy + 26} rx={40} ry={34} fill="#fff" />
       mouth = false
