@@ -182,6 +182,28 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
 .figsvg { display: block; margin: 0 auto; max-width: 100%; height: auto; max-height: 300px }
 .flabel { font: 800 16px var(--body) }
 
+/* World pill + map */
+.world-pill { cursor: pointer; font-size: 16px; line-height: 1.05; text-align: left; padding-right: 14px }
+.wp-text { display: flex; flex-direction: column }
+.wp-u { font-family: var(--body); font-weight: 800; font-size: 11px; color: var(--muted); letter-spacing: .3px }
+.learn-where { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: #FFF6CC; border: 3px solid var(--ink); border-radius: 16px; padding: 10px 12px }
+.map { width: min(720px, 100%) }
+.map-unit { border: 2px dashed #9DB5D3; border-radius: 16px; padding: 8px 10px; color: var(--muted) }
+.map-unit.open { border: 3px solid var(--ink); background: var(--paper2); color: var(--ink) }
+.map-unit-head { display: flex; align-items: center; gap: 10px }
+.map-unit-head .wn { font-family: var(--display); font-size: 18px; width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--line); color: var(--ink); flex: none }
+.map-unit.open .wn { background: var(--sun); border: 2px solid var(--ink) }
+.map-unit-head .wt { font-weight: 800; font-size: 15px }
+.map-unit-head .ws { margin-left: auto; font-size: 12px; font-weight: 800 }
+.map-zones { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; margin-top: 8px }
+.map-zone { display: flex; flex-direction: column; gap: 2px; text-align: left; border: 3px solid var(--ink); border-radius: 14px; background: #fff; padding: 8px 10px; cursor: pointer; box-shadow: 0 3px 0 var(--ink) }
+.map-zone.here { background: #FFF6CC; outline: 3px solid var(--sun); outline-offset: -7px }
+.mz-t { font-family: var(--display); font-size: 17px; line-height: 1.1 }
+.mz-b { font-size: 12px; font-weight: 600; color: var(--muted); line-height: 1.25 }
+.mz-l { font-size: 12px; font-weight: 800; color: #B0226A; margin-top: 2px }
+.minis.solids { grid-template-columns: repeat(2, 1fr) }
+.minis.solids div { font-size: 12px }
+
 /* Question sheet */
 .overlay { position: fixed; inset: 0; background: rgba(30,42,74,.55); display: flex; align-items: flex-end; justify-content: center; z-index: 20;
   padding: 16px; padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) }

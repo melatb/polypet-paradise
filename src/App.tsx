@@ -4,6 +4,7 @@ import { HatchModal } from './components/HatchModal'
 import { Hud } from './components/Hud'
 import { EggShop, LearnPanel, PetsPanel, WardrobePanel } from './components/Panels'
 import { QuestionSheet } from './components/QuestionSheet'
+import { WorldMap } from './components/WorldMap'
 import { Yard } from './components/Yard'
 import type { EggId } from './game/catalog'
 import { useGame } from './game/GameProvider'
@@ -23,6 +24,7 @@ export default function App() {
   const [tab, setTab] = useState<Tab>('pets')
   const [question, setQuestion] = useState<Question | null>(null)
   const [celebrate, setCelebrate] = useState(0)
+  const [map, setMap] = useState(false)
   const [hatch, setHatch] = useState<{ egg: EggId; pet: PetInstance; isNew: boolean } | null>(null)
 
   const openQuestion = () => setQuestion(game.nextQuestion())
@@ -33,7 +35,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Hud />
+      <Hud onMap={() => setMap(true)} />
       <div className="main">
         <Yard onSolve={openQuestion} celebrate={celebrate} />
         <section className="panel side">
@@ -51,7 +53,7 @@ export default function App() {
               {tab === 'pets' && <PetsPanel />}
               {tab === 'wardrobe' && <WardrobePanel />}
               {tab === 'eggs' && <EggShop onBuy={buy} />}
-              {tab === 'learn' && <LearnPanel />}
+              {tab === 'learn' && <LearnPanel onMap={() => setMap(true)} />}
             </motion.div>
           </AnimatePresence>
         </section>
@@ -65,6 +67,7 @@ export default function App() {
           }} />
         )}
       </AnimatePresence>
+      <AnimatePresence>{map && <WorldMap key="m" onClose={() => setMap(false)} />}</AnimatePresence>
       <AnimatePresence>
         {hatch && (
           <HatchModal key="h" {...hatch} onDone={(makeActive) => {

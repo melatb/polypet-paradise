@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "build:single": "tsc -b && vite build --mode single",
     "typecheck": "tsc -b",
-    "build:artifact": "npm run build:single && node scripts/artifact.mjs"
+    "build:artifact": "npm run build:single && node scripts/artifact.mjs",
+    "test": "vitest run"
   },
   "dependencies": {
     "framer-motion": "^13.4.4",
@@ -25,6 +26,7 @@
     "oxlint": "^1.81.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
-    "vite-plugin-singlefile": "^2.3.3"
+    "vite-plugin-singlefile": "^2.3.3",
+    "vitest": "^5.0.2"
   }
 }

@@ -42,8 +42,10 @@ export interface PetInstance {
 export interface GameState {
   version: 2
   coins: number
-  /** Total correct answers; drives player level. */
+  /** Total correct answers across all worlds. */
   correct: number
+  /** Correct answers per zone; each zone has its own level. */
+  zoneProgress: Record<string, number>
   streak: number
   best: number
   pets: PetInstance[]

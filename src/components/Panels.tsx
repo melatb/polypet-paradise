@@ -4,7 +4,7 @@ import { useGame } from '../game/GameProvider'
 import { LESSON_REWARD } from '../game/rules'
 import type { HatId, Look, NeckId, PaintId, Rarity, Stage } from '../game/types'
 import { useFx } from '../fx/Fx'
-import { GRADE6_UNITS, ZONES_BY_ID } from '../math/units'
+import { ZONES_BY_ID } from '../math/units'
 import { EggArt, PetArt } from '../pets/PetArt'
 import { CoinIcon, RarityChip } from './CoinIcon'
 import { RarityIcon } from './RarityIcon'
@@ -120,29 +120,17 @@ export function EggShop({ onBuy }: { onBuy: (egg: EggId) => void }) {
 }
 
 /* ---------- Learn ---------- */
-export function LearnPanel() {
+export function LearnPanel({ onMap }: { onMap: () => void }) {
   const { state, claimLesson } = useGame()
   const fx = useFx()
   const zone = ZONES_BY_ID[state.zoneId]
   return (
     <>
-      <div>
-        <h3 className="h3">Worlds</h3>
-        <p className="sub">Each unit of Grade 6 math becomes a world. More are on the way.</p>
+      <div className="learn-where">
+        <div><span className="sub">You're in</span><h3 className="h3">Unit {zone.unit} · {zone.title}</h3></div>
+        <button className="btn sm white" onClick={onMap}>Change world</button>
       </div>
-      <div className="worlds">
-        {GRADE6_UNITS.map((u) => {
-          const open = u.unit === zone.unit
-          return (
-            <div key={u.unit} className={'world' + (open ? ' open' : '')}>
-              <span className="wn">{u.unit}</span>
-              <span className="wt">{u.title}</span>
-              <span className="ws">{open ? zone.title : 'Coming soon'}</span>
-            </div>
-          )
-        })}
-      </div>
-      <div><h3 className="h3">Pet trainer's handbook</h3><p className="sub">Unit {zone.unit} · {zone.title}. Read a card, play with the picture, and collect {LESSON_REWARD} coins for each one.</p></div>
+      <div><h3 className="h3">Pet trainer's handbook</h3><p className="sub">Read a card, play with the picture, and collect {LESSON_REWARD} coins for each one.</p></div>
       {zone.lessons.map((l, i) => (
         <div key={l.id} className="lesson">
           <span className="tag">{i + 1} · {l.tag}</span>

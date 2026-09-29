@@ -16,6 +16,7 @@ npm run dev            # local dev server with hot reload
 npm run build          # production build in dist/ (for Firebase Hosting later)
 npm run build:artifact # single-file preview in dist-single/artifact.html
 npm run typecheck
+npm test               # generates hundreds of problems of every type and checks each one
 ```
 
 ## How the code is organized
@@ -31,9 +32,11 @@ src/
   math/
     types.ts            Question, QuestionType, Lesson and Zone types
     Figure.tsx          Draws grid diagrams from plain data
+    shapes.ts           Builders for unit squares, boxes, prisms, pyramids and nets
     units/
       index.ts          Registry of playable zones + the Grade 6 roadmap
-      g6u1/             Unit 1, "Triangles and Other Polygons": questions + lessons
+      g6u1/             Unit 1: area, parallelograms, polygons, surface area
+      questions.test.ts Checks every question generator (also runs before each deploy)
   pets/PetArt.tsx       Pet and egg drawings, colors and outfits
   components/           Yard, question sheet, hatching, panels, HUD
   fx/Fx.tsx             Confetti, flying coins, toasts
@@ -41,16 +44,17 @@ src/
 
 ### Adding a new unit or section
 
-1. Create `src/math/units/g6uN/` with a `questions.ts` exporting `QuestionType[]` and a `lessons.tsx` exporting `Lesson[]`. Copy `g6u1` as a template.
-2. Register a `Zone` for it in `src/math/units/index.ts`.
+1. Create `src/math/units/g6uN/` with a questions file exporting `QuestionType[]` and a lessons file exporting `Lesson[]`. Copy a `g6u1` section as a template.
+2. Register a `Zone` for each section in `src/math/units/index.ts`. It appears on the world map automatically.
+3. Run `npm test`. Every new question type is checked automatically.
 
 Each question type has an `unlockLevel` (the player level where it starts appearing) and a `make()` function that generates a fresh random problem. The game logic never needs to change to add math.
 
 ## Roadmap
 
 - [x] **Phase 1: Foundation.** React + TypeScript. Animations (walking, blinking, hopping, egg cracking, flying coins). Growth-stage colors and outfits with a wardrobe.
+- [ ] **Phase 3: All of Grade 6.** (in progress, done first) Unit 1 complete with 4 sections and a world map. Units 2–9 next.
 - [ ] **Phase 2: Accounts.** Firebase Authentication with invitation-only, parent-managed family accounts. Cloud saves via a Firestore `GameStorage`.
-- [ ] **Phase 3: All of Grade 6.** Units 2–9 as new worlds.
 - [ ] **Phase 4: Friends and trading.** Friend codes, trade requests, two-sided confirmation, no free-text chat.
 - [ ] **Phase 5: Trimathlons.** Timed competitions with family leaderboards.
 

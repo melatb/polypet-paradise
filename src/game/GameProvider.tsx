@@ -14,6 +14,7 @@ interface GameApi {
   claimLesson: (id: string) => void
   setActive: (id: string) => void
   updatePet: (id: string, change: Partial<PetInstance>) => void
+  setZone: (zoneId: string) => void
 }
 
 const Ctx = createContext<GameApi | null>(null)
@@ -61,6 +62,7 @@ export function GameProvider({ children, storage = localStorageBackend }: { chil
       claimLesson: (id) => commit(rules.claimLesson(cur(), id)),
       setActive: (id) => commit({ ...cur(), activeId: id }),
       updatePet: (id, change) => commit(rules.updatePet(cur(), id, change)),
+      setZone: (zoneId) => commit(rules.setZone(cur(), zoneId)),
     }
   }, [state, commit])
 

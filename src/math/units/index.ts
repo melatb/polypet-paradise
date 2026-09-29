@@ -1,21 +1,25 @@
 import type { Zone } from '../types'
+import { areaQuestionTypes } from './g6u1/area'
+import { areaLessons } from './g6u1/areaLessons'
+import { parallelogramLessons } from './g6u1/parallelogramLessons'
+import { parallelogramQuestionTypes } from './g6u1/parallelograms'
 import { polygonLessons } from './g6u1/lessons'
 import { polygonQuestionTypes } from './g6u1/questions'
+import { surfaceLessons } from './g6u1/surfaceLessons'
+import { surfaceQuestionTypes } from './g6u1/surface'
 
 const IM_CREDIT = 'Math content based on Illustrative Mathematics 6–8 Math v.360 (CC BY-NC 4.0).'
+const U1 = { grade: 6, unit: 1, unitTitle: 'Area and Surface Area', credit: IM_CREDIT }
 
-/** Playable zones. Add a folder under units/ and register it here to add a new section. */
+/**
+ * Playable zones, in the order they appear on the world map.
+ * To add a section: make a folder under units/ and register a zone here.
+ */
 export const ZONES: Zone[] = [
-  {
-    id: 'g6u1-polygons',
-    grade: 6,
-    unit: 1,
-    unitTitle: 'Area and Surface Area',
-    title: 'Triangles and Other Polygons',
-    questionTypes: polygonQuestionTypes,
-    lessons: polygonLessons,
-    credit: IM_CREDIT,
-  },
+  { ...U1, id: 'g6u1-area', title: 'Reasoning to Find Area', short: 'Finding Area', blurb: 'Count squares, break shapes apart, move pieces', questionTypes: areaQuestionTypes, lessons: areaLessons },
+  { ...U1, id: 'g6u1-parallelograms', title: 'Parallelograms', short: 'Parallelograms', blurb: 'Base times height, and matching heights', questionTypes: parallelogramQuestionTypes, lessons: parallelogramLessons },
+  { ...U1, id: 'g6u1-polygons', title: 'Triangles and Other Polygons', short: 'Polygons', blurb: 'Half a parallelogram, and cutting polygons into triangles', questionTypes: polygonQuestionTypes, lessons: polygonLessons },
+  { ...U1, id: 'g6u1-surface', title: 'Surface Area', short: 'Surface Area', blurb: 'Nets, prisms and pyramids', questionTypes: surfaceQuestionTypes, lessons: surfaceLessons },
 ]
 export const ZONES_BY_ID: Record<string, Zone> = Object.fromEntries(ZONES.map((z) => [z.id, z]))
 

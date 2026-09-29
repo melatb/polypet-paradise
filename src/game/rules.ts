@@ -9,7 +9,9 @@ import { pick, randInt, uid } from './random'
 import type { GameState, PetInstance, Rarity, Stage } from './types'
 
 export const LEVEL_EVERY = 5
-export const level = (s: GameState) => 1 + Math.floor(s.correct / LEVEL_EVERY)
+export const zoneCorrect = (s: GameState, zoneId = s.zoneId) => s.zoneProgress[zoneId] ?? 0
+/** Level in a zone (the current one by default). Each world levels up separately. */
+export const level = (s: GameState, zoneId = s.zoneId) => 1 + Math.floor(zoneCorrect(s, zoneId) / LEVEL_EVERY)
 export const activePet = (s: GameState) => s.pets.find((p) => p.id === s.activeId) ?? s.pets[0]
 
 export function newPet(species: string): PetInstance {
@@ -19,7 +21,7 @@ export function newPet(species: string): PetInstance {
 export function freshState(): GameState {
   const starter = newPet('tripup')
   starter.need = 0
-  return { version: 2, coins: 45, correct: 0, streak: 0, best: 0, pets: [starter], activeId: starter.id, lessons: {}, zoneId: 'g6u1-polygons' }
+  return { version: 2, coins: 45, correct: 0, streak: 0, best: 0, pets: [starter], activeId: starter.id, lessons: {}, zoneProgress: {}, zoneId: 'g6u1-area' }
 }
 
 /* ---------- questions ---------- */
@@ -78,11 +80,12 @@ export function applyAnswer(s: GameState, a: AnswerInput): { state: GameState; r
   const pet = activePet(s)
   const bonus = RARITY[SPECIES_BY_ID[pet.species].rarity].bonus
   const lvl = level(s)
-  let coins: number, correct = s.correct, streak = s.streak
+  let coins: number, correct = s.correct, streak = s.streak, zoneProgress = s.zoneProgress
   if (a.correct) {
     const clean = a.firstTry && !a.usedHint
     coins = clean ? 10 + 2 * lvl + bonus + Math.min(s.streak, 5) * 2 : 5 + bonus
     correct++
+    zoneProgress = { ...zoneProgress, [s.zoneId]: zoneCorrect(s) + 1 }
     streak = a.firstTry ? streak + 1 : 0
   } else {
     coins = 2
@@ -90,7 +93,7 @@ export function applyAnswer(s: GameState, a: AnswerInput): { state: GameState; r
   }
   const { pet: fed, grewTo } = feed(pet)
   const next: GameState = {
-    ...s, coins: s.coins + coins, correct, streak, best: Math.max(s.best, streak),
+    ...s, coins: s.coins + coins, correct, zoneProgress, streak, best: Math.max(s.best, streak),
     pets: s.pets.map((p) => (p.id === pet.id ? fed : p)),
   }
   const newLvl = level(next)
@@ -112,6 +115,10 @@ export function hatchEgg(s: GameState, egg: EggId): { state: GameState; pet: Pet
   const isNew = !s.pets.some((p) => p.species === species.id)
   const pet = newPet(species.id)
   return { state: { ...s, coins: s.coins - E.cost, pets: [...s.pets, pet] }, pet, isNew }
+}
+
+export function setZone(s: GameState, zoneId: string): GameState {
+  return ZONES_BY_ID[zoneId] ? { ...s, zoneId, lastQuestionType: undefined } : s
 }
 
 export const LESSON_REWARD = 20

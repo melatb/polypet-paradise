@@ -59,7 +59,7 @@ function gridTriangle({ level }: QuestionContext): Question {
 
 function parallelogram(): Question {
   const [o, h, s] = pick([[3, 4, 5], [4, 3, 5]] as const)
-  const b = R(4, 8)
+  const b = pick([6, 7, 8]) // never equal to the height or the slanted side, so answer choices stay distinct
   const fig = () => ({
     x0: -2, x1: b + o + 1, y0: -1.2, y1: h + 0.7,
     alt: `Parallelogram, base ${b}, slanted side ${s}, height ${h}`,

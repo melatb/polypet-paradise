@@ -72,6 +72,10 @@ export interface Zone {
   unit: number
   unitTitle: string
   title: string
+  /** Short name for tight spaces, e.g. "Polygons". */
+  short: string
+  /** One line shown on the world map. */
+  blurb: string
   questionTypes: QuestionType[]
   lessons: Lesson[]
   credit: string
