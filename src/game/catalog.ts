@@ -49,7 +49,7 @@ export const PAINTS: Record<PaintId, { name: string; stage: Stage }> = {
   pastel: { name: 'Cotton Candy', stage: 1 },
   ocean: { name: 'Ocean', stage: 2 },
   sunset: { name: 'Sunset', stage: 3 },
-  neon: { name: 'Neon', stage: 4 },
+  galactic: { name: 'Galactic', stage: 4 },
 }
 export const HATS: Record<HatId, { name: string; stage: Stage }> = {
   none: { name: 'No hat', stage: 0 },
@@ -69,5 +69,5 @@ export const STAGE_UNLOCKS: Record<Stage, { paint: PaintId; hat?: HatId; neck?: 
   1: { paint: 'pastel', hat: 'cap' },
   2: { paint: 'ocean', hat: 'headphones' },
   3: { paint: 'sunset', neck: 'bowtie' },
-  4: { paint: 'neon', hat: 'crown' },
+  4: { paint: 'galactic', hat: 'crown' },
 }

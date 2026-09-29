@@ -18,7 +18,7 @@ export interface Species {
   body: string
 }
 
-export type PaintId = 'natural' | 'pastel' | 'ocean' | 'sunset' | 'neon'
+export type PaintId = 'natural' | 'pastel' | 'ocean' | 'sunset' | 'galactic'
 export type HatId = 'none' | 'cap' | 'headphones' | 'crown'
 export type NeckId = 'none' | 'bib' | 'bowtie'
 

@@ -26,13 +26,13 @@ function mix(a: string, b: string, t: number) {
   return '#' + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, '0')).join('')
 }
 
-interface Paint { fill: string; dark: string; grad?: [string, string]; neon?: boolean }
+interface Paint { fill: string; dark: string; grad?: [string, string]; galactic?: boolean }
 export function resolvePaint(sp: Species, paint: PaintId): Paint {
   switch (paint) {
     case 'pastel': return { fill: mix(sp.color, '#ffffff', 0.45), dark: mix(sp.dark, '#ffffff', 0.25) }
     case 'ocean': return { fill: '#5EC8F2', dark: '#2466C9', grad: ['#8FE3FF', '#3B8BFF'] }
     case 'sunset': return { fill: '#FF9F5A', dark: '#D23C7E', grad: ['#FFD23F', '#FF5FA8'] }
-    case 'neon': return { fill: '#6CFFB8', dark: '#7A2FE0', grad: ['#6CFFB8', '#B05CFF'], neon: true }
+    case 'galactic': return { fill: '#6CFFB8', dark: '#7A2FE0', grad: ['#6CFFB8', '#B05CFF'], galactic: true }
     default: return { fill: sp.color, dark: sp.dark }
   }
 }
@@ -165,7 +165,7 @@ export function PetArt({ species: sp, stage, look, animated = false, className }
   const full = stage >= 4
 
   return (
-    <svg viewBox="-12 -56 224 244" role="img" aria-label={sp.name} className={[className, paint.neon ? 'neon' : '', animated ? 'pet-anim' : ''].join(' ')}>
+    <svg viewBox="-12 -56 224 244" role="img" aria-label={sp.name} className={[className, paint.galactic ? 'galactic' : '', animated ? 'pet-anim' : ''].join(' ')}>
       {paint.grad && (
         <defs>
           <linearGradient id={gid} x1="0" y1="0" x2="0.4" y2="1">
