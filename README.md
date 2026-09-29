@@ -33,9 +33,12 @@ src/
     types.ts            Question, QuestionType, Lesson and Zone types
     Figure.tsx          Draws grid diagrams from plain data
     shapes.ts           Builders for unit squares, boxes, prisms, pyramids and nets
+    ratioDiagrams.ts    Builders for ratio diagrams, double number lines, tape diagrams, 10×10 grids
     units/
       index.ts          Registry of playable zones + the Grade 6 roadmap
       g6u1/             Unit 1: area, parallelograms, polygons, surface area
+      g6u2/             Unit 2: ratios, double number lines, tables and tape diagrams
+      g6u3/             Unit 3: measurement, unit rates, percentages
       questions.test.ts Checks every question generator (also runs before each deploy)
   pets/PetArt.tsx       Pet and egg drawings, colors and outfits
   components/           Yard, question sheet, hatching, panels, HUD
@@ -53,7 +56,7 @@ Each question type has an `unlockLevel` (the player level where it starts appear
 ## Roadmap
 
 - [x] **Phase 1: Foundation.** React + TypeScript. Animations (walking, blinking, hopping, egg cracking, flying coins). Growth-stage colors and outfits with a wardrobe.
-- [ ] **Phase 3: All of Grade 6.** (in progress, done first) Unit 1 complete with 4 sections and a world map. Units 2–9 next.
+- [ ] **Phase 3: All of Grade 6.** (in progress, done first) Units 1–3 complete: 10 worlds on the world map. Units 4–9 next.
 - [ ] **Phase 2: Accounts.** Firebase Authentication with invitation-only, parent-managed family accounts. Cloud saves via a Firestore `GameStorage`.
 - [ ] **Phase 4: Friends and trading.** Friend codes, trade requests, two-sided confirmation, no free-text chat.
 - [ ] **Phase 5: Trimathlons.** Timed competitions with family leaderboards.

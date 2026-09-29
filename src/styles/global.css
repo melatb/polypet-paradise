@@ -175,12 +175,21 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
 .minis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px }
 .minis div { border: 2px solid var(--line); border-radius: 12px; text-align: center; font-weight: 800; font-size: 13px; padding: 4px }
 .minis svg { width: 100%; height: auto; max-width: 90px }
+.say { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; max-width: 62ch }
 .credit { font-size: 12px; color: var(--muted); margin: 0 }
 
 /* Figures */
 .fig { background: #fff; border: 2px solid var(--line); border-radius: 14px; padding: 6px; overflow-x: auto }
 .figsvg { display: block; margin: 0 auto; max-width: 100%; height: auto; max-height: 300px }
 .flabel { font: 800 16px var(--body) }
+.flabel.small { font-size: 13px; font-weight: 700 }
+.qtable-wrap { overflow-x: auto }
+.qtable { border-collapse: separate; border-spacing: 0; margin: 0 auto; font-variant-numeric: tabular-nums; border: 3px solid var(--ink); border-radius: 14px; overflow: hidden; background: #fff; min-width: 240px }
+.qtable th { background: var(--sky2); font-family: var(--display); font-weight: 400; font-size: 16px; padding: 6px 14px; border-bottom: 3px solid var(--ink) }
+.qtable td { font-family: var(--display); font-size: 20px; text-align: center; padding: 5px 14px; border-top: 2px solid var(--line) }
+.qtable th + th, .qtable td + td { border-left: 3px solid var(--ink) }
+.qtable td.ask { color: #E0287D }
+.qtable tr.hl td { background: #FFF6CC }
 
 /* World pill + map */
 .world-pill { cursor: pointer; font-size: 16px; line-height: 1.05; text-align: left; padding-right: 14px }

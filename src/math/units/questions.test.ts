@@ -37,6 +37,12 @@ for (const zone of ZONES) {
             if (q.commonSlip) expect(q.commonSlip.value).not.toBe(q.answer)
           }
           if (q.figure) { checkFigure(q.figure(false)); checkFigure(q.figure(true)) }
+          if (q.table) {
+            for (const row of q.table.rows) {
+              expect(row).toHaveLength(2)
+              for (const c of row) expect(String(c)).not.toMatch(/NaN|undefined|Infinity/)
+            }
+          }
         }
       })
     }

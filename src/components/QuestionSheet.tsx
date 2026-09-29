@@ -5,7 +5,7 @@ import { useGame } from '../game/GameProvider'
 import { fmt, pick } from '../game/random'
 import { parseAnswer, unlocksAtLevel } from '../game/rules'
 import { useFx } from '../fx/Fx'
-import { Figure, Mini } from '../math/Figure'
+import { Figure, Mini, RatioTable } from '../math/Figure'
 import type { Question } from '../math/types'
 import { PetArt } from '../pets/PetArt'
 
@@ -127,6 +127,7 @@ export function QuestionSheet({ question: q, onClose }: Props) {
           <span className="qtype">{q.name.toUpperCase()}</span>
           <p className="prompt">{q.prompt}</p>
           {fig && <div className="fig"><Figure spec={fig} /></div>}
+          {q.table && <RatioTable spec={q.table} />}
 
           {!done && (q.choices ? (
             <div className={'mc' + (pictureChoices ? ' mc-svg' : '')}>

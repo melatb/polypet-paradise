@@ -1,4 +1,4 @@
-import type { FigureSpec, MiniShape, Pt } from './types'
+import type { FigureSpec, MiniShape, Pt, RatioTableSpec } from './types'
 
 export const INK = '#1E2A4A'
 export const HELP = '#E0287D'
@@ -51,7 +51,7 @@ export function Figure({ spec }: { spec: FigureSpec }) {
         return <polyline key={'m' + i} points={pts([a, b, d])} fill="none" stroke={m.color ?? INK} strokeWidth={2.2} />
       })}
       {spec.labels?.map((l, i) => (
-        <text key={'l' + i} x={X(l.x)} y={Y(l.y)} textAnchor="middle" dominantBaseline="middle" className="flabel"
+        <text key={'l' + i} x={X(l.x)} y={Y(l.y)} textAnchor={l.anchor ?? 'middle'} dominantBaseline="middle" className={l.small ? 'flabel small' : 'flabel'}
           fill={l.color ?? INK} paintOrder="stroke" stroke="#fff" strokeWidth={5} strokeLinejoin="round">{l.t}</text>
       ))}
     </svg>
@@ -78,3 +78,22 @@ export function Mini({ shape }: { shape: MiniShape }) {
   }
   return <svg viewBox="0 0 90 92" role="img" aria-label={shape.kind === 'polygon' ? 'polygon' : shape.kind}>{body}</svg>
 }
+
+/** Table of equivalent ratios; a "?" cell is shown as a blank to fill in. */
+export function RatioTable({ spec }: { spec: RatioTableSpec }) {
+  return (
+    <div className="qtable-wrap">
+      <table className="qtable">
+        <thead><tr><th>{spec.cols[0]}</th><th>{spec.cols[1]}</th></tr></thead>
+        <tbody>
+          {spec.rows.map((r, i) => (
+            <tr key={i} className={spec.highlight === i ? 'hl' : undefined}>
+              {r.map((c, j) => <td key={j} className={c === '?' ? 'ask' : undefined}>{typeof c === 'number' ? fmtNum(c) : c}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+const fmtNum = (n: number) => (Number.isInteger(n) ? String(n) : String(Math.round(n * 100) / 100))
