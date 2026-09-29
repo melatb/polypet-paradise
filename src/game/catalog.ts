@@ -1,11 +1,12 @@
 import type { HatId, NeckId, PaintId, Rarity, Species, Stage } from './types'
 
+/** Rarity tiers climb through dimensions: 0D dot → 4D tesseract. Keys stay stable for saved games. */
 export const RARITY: Record<Rarity, { label: string; color: string; bonus: number }> = {
-  common: { label: 'Common', color: '#8C9AB5', bonus: 0 },
-  uncommon: { label: 'Uncommon', color: '#3FBF5F', bonus: 2 },
-  rare: { label: 'Rare', color: '#3B8BFF', bonus: 4 },
-  ultra: { label: 'Ultra-Rare', color: '#A64DFF', bonus: 7 },
-  legendary: { label: 'Legendary', color: '#FFAA00', bonus: 12 },
+  common: { label: 'Dot', color: '#8C9AB5', bonus: 0 },
+  uncommon: { label: 'Line', color: '#3FBF5F', bonus: 2 },
+  rare: { label: 'Plane', color: '#3B8BFF', bonus: 4 },
+  ultra: { label: 'Solid', color: '#A64DFF', bonus: 7 },
+  legendary: { label: 'Tesseract', color: '#FFAA00', bonus: 12 },
 }
 
 export const SPECIES: Species[] = [
