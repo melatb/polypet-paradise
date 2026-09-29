@@ -3,6 +3,7 @@ import { useGame } from '../game/GameProvider'
 import { LEVEL_EVERY, zoneCorrect } from '../game/rules'
 import { ZONES_BY_ID } from '../math/units'
 import { CoinIcon } from './CoinIcon'
+import { MusicToggle } from './MusicToggle'
 
 export function Hud({ onMap }: { onMap: () => void }) {
   const { state, level } = useGame()
@@ -28,6 +29,7 @@ export function Hud({ onMap }: { onMap: () => void }) {
       <div className="pill" title="Correct on the first try in a row">
         <span className="pill-k">STREAK</span><span>{state.streak}</span>
       </div>
+      <MusicToggle />
     </header>
   )
 }

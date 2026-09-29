@@ -192,6 +192,7 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
 .qtable tr.hl td { background: #FFF6CC }
 
 /* World pill + map */
+.music-pill { cursor: pointer; padding: 4px 8px }
 .world-pill { cursor: pointer; font-size: 16px; line-height: 1.05; text-align: left; padding-right: 14px }
 .wp-text { display: flex; flex-direction: column }
 .wp-u { font-family: var(--body); font-weight: 800; font-size: 11px; color: var(--muted); letter-spacing: .3px }

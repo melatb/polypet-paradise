@@ -43,6 +43,7 @@ src/
   pets/PetArt.tsx       Pet and egg drawings, colors and outfits
   components/           Yard, question sheet, hatching, panels, HUD
   fx/Fx.tsx             Confetti, flying coins, toasts
+  audio/music.ts        Original background music, synthesized live with the Web Audio API (no audio files)
 ```
 
 ### Adding a new unit or section
