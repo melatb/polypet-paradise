@@ -13,7 +13,7 @@ export const level = (s: GameState) => 1 + Math.floor(s.correct / LEVEL_EVERY)
 export const activePet = (s: GameState) => s.pets.find((p) => p.id === s.activeId) ?? s.pets[0]
 
 export function newPet(species: string): PetInstance {
-  return { id: uid(), species, stage: 0, prog: 0, need: randInt(0, NEEDS.length - 1), look: { paint: 'natural', hat: 'none', neck: 'bib' } }
+  return { id: uid(), species, stage: 0, prog: 0, need: randInt(0, NEEDS.length - 1), look: { paint: 'pi', hat: 'none', neck: 'bib' } }
 }
 
 export function freshState(): GameState {

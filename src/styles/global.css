@@ -92,9 +92,6 @@ button { font-family: inherit; color: inherit }
 @keyframes twinkle { 50% { transform: scale(.5) rotate(45deg); opacity: .5 } }
 .pet-anim .pet-aura { animation: aura 2s ease-in-out infinite }
 @keyframes aura { 50% { opacity: .35 } }
-svg.neon { filter: drop-shadow(0 0 6px #6CFFB8) drop-shadow(0 0 10px #B05CFF) }
-svg.neon.pet-anim { animation: neon 4s linear infinite }
-@keyframes neon { to { filter: drop-shadow(0 0 6px #6CFFB8) drop-shadow(0 0 10px #B05CFF) hue-rotate(360deg) } }
 
 /* Buttons */
 .btn { font-family: var(--display); font-size: 19px; letter-spacing: .3px; border: 3px solid var(--ink); border-radius: 14px; padding: 9px 18px;

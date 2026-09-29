@@ -34,7 +34,7 @@ export function PetsPanel() {
       <div className="book">
         {SPECIES.map((s) => (
           <div key={s.id} className={'slot' + (owned.has(s.id) ? '' : ' no')} title={owned.has(s.id) ? `${s.name} · body: ${s.body}` : 'Not found yet'}>
-            <PetArt species={s} stage={0} look={{ paint: 'natural', hat: 'none', neck: 'none' }} />
+            <PetArt species={s} stage={0} look={{ paint: 'pi', hat: 'none', neck: 'none' }} />
             <span className="slot-rar" style={{ color: RARITY[s.rarity].color }} title={RARITY[s.rarity].label}><RarityIcon rarity={s.rarity} size={15} /></span>
           </div>
         ))}
