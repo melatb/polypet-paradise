@@ -2,11 +2,12 @@ import { motion } from 'framer-motion'
 import { EGGS, HATS, NECKS, PAINTS, RARITY, SPECIES, SPECIES_BY_ID, STAGES, type EggId } from '../game/catalog'
 import { useGame } from '../game/GameProvider'
 import { LESSON_REWARD } from '../game/rules'
-import type { HatId, Look, NeckId, PaintId, Stage } from '../game/types'
+import type { HatId, Look, NeckId, PaintId, Rarity, Stage } from '../game/types'
 import { useFx } from '../fx/Fx'
 import { GRADE6_UNITS, ZONES_BY_ID } from '../math/units'
 import { EggArt, PetArt } from '../pets/PetArt'
 import { CoinIcon, RarityChip } from './CoinIcon'
+import { RarityIcon } from './RarityIcon'
 
 /* ---------- Pets ---------- */
 export function PetsPanel() {
@@ -34,7 +35,7 @@ export function PetsPanel() {
         {SPECIES.map((s) => (
           <div key={s.id} className={'slot' + (owned.has(s.id) ? '' : ' no')} title={owned.has(s.id) ? `${s.name} · body: ${s.body}` : 'Not found yet'}>
             <PetArt species={s} stage={0} look={{ paint: 'natural', hat: 'none', neck: 'none' }} />
-            <span className="dot" style={{ background: RARITY[s.rarity].color }} />
+            <span className="slot-rar" style={{ color: RARITY[s.rarity].color }} title={RARITY[s.rarity].label}><RarityIcon rarity={s.rarity} size={15} /></span>
           </div>
         ))}
       </div>
@@ -100,8 +101,10 @@ export function EggShop({ onBuy }: { onBuy: (egg: EggId) => void }) {
               <motion.div className="egg-art" whileHover={{ rotate: [0, -6, 6, -3, 0] }} transition={{ duration: 0.5 }}><EggArt egg={k} /></motion.div>
               <div className="en">{E.name}</div>
               <div className="odds">
-                {Object.entries(E.odds).map(([r, v]) => (
-                  <span key={r} className="chip" style={{ borderColor: RARITY[r as keyof typeof RARITY].color }}>{RARITY[r as keyof typeof RARITY].label} {v}%</span>
+                {(Object.entries(E.odds) as [Rarity, number][]).map(([r, v]) => (
+                  <span key={r} className="chip odds-chip" style={{ borderColor: RARITY[r].color }}>
+                    <span style={{ color: RARITY[r].color, display: 'inline-flex' }}><RarityIcon rarity={r} size={12} /></span>{RARITY[r].label} {v}%
+                  </span>
                 ))}
               </div>
               <div className="price"><CoinIcon size={20} />{E.cost}</div>

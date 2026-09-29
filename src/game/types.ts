@@ -1,4 +1,5 @@
-export type Rarity = 'common' | 'uncommon' | 'rare' | 'ultra' | 'legendary'
+/** Rarity tiers climb through dimensions, 0D to 4D. */
+export type Rarity = 'dot' | 'line' | 'plane' | 'solid' | 'tesseract'
 export type Stage = 0 | 1 | 2 | 3 | 4
 export type BodyShape = 'tri' | 'square' | 'rhombus' | 'para' | 'trap' | 5 | 6 | 7 | 8 | 10
 export type PetKind =

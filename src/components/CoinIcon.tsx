@@ -1,5 +1,6 @@
 import { RARITY } from '../game/catalog'
 import type { Rarity } from '../game/types'
+import { RarityIcon } from './RarityIcon'
 
 export function CoinIcon({ size = 30 }: { size?: number }) {
   return (
@@ -12,5 +13,9 @@ export function CoinIcon({ size = 30 }: { size?: number }) {
 
 export function RarityChip({ rarity, extra }: { rarity: Rarity; extra?: string }) {
   const r = RARITY[rarity]
-  return <span className="chip rar" style={{ background: r.color }}>{r.label}{extra ? ` · ${extra}` : ''}</span>
+  return (
+    <span className="chip rar" style={{ background: r.color }} title={`${r.label} (${r.dim})`}>
+      <RarityIcon rarity={rarity} />{r.label}{extra ? ` · ${extra}` : ''}
+    </span>
+  )
 }
