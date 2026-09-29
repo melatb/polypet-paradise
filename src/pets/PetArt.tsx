@@ -1,7 +1,6 @@
 import { useId, type ReactNode } from 'react'
 import { EGGS, type EggId } from '../game/catalog'
-import type { Look, Species, Stage } from '../game/types'
-import { resolvePaint } from './paints'
+import type { Look, PaintId, Species, Stage } from '../game/types'
 
 const O = '#1E2A4A'
 type P = [number, number]
@@ -21,6 +20,23 @@ export function bodyPoints(shape: Species['shape']): P[] {
 const pp = (pts: P[]) => pts.map((p) => `${p[0].toFixed(1)},${p[1].toFixed(1)}`).join(' ')
 const mx = (pts: P[]): P[] => pts.map(([x, y]) => [200 - x, y])
 
+function mix(a: string, b: string, t: number) {
+  const pa = [1, 3, 5].map((i) => parseInt(a.slice(i, i + 2), 16))
+  const pb = [1, 3, 5].map((i) => parseInt(b.slice(i, i + 2), 16))
+  return '#' + pa.map((v, i) => Math.round(v + (pb[i] - v) * t).toString(16).padStart(2, '0')).join('')
+}
+
+interface Paint { fill: string; dark: string; grad?: [string, string]; neon?: boolean }
+export function resolvePaint(sp: Species, paint: PaintId): Paint {
+  switch (paint) {
+    case 'pastel': return { fill: mix(sp.color, '#ffffff', 0.45), dark: mix(sp.dark, '#ffffff', 0.25) }
+    case 'ocean': return { fill: '#5EC8F2', dark: '#2466C9', grad: ['#8FE3FF', '#3B8BFF'] }
+    case 'sunset': return { fill: '#FF9F5A', dark: '#D23C7E', grad: ['#FFD23F', '#FF5FA8'] }
+    case 'neon': return { fill: '#6CFFB8', dark: '#7A2FE0', grad: ['#6CFFB8', '#B05CFF'], neon: true }
+    default: return { fill: sp.color, dark: sp.dark }
+  }
+}
+
 function Poly({ pts, fill, sw = 4 }: { pts: P[]; fill: string; sw?: number }) {
   return <polygon points={pp(pts)} fill={fill} stroke={O} strokeWidth={sw} strokeLinejoin="round" />
 }
@@ -37,8 +53,8 @@ export interface PetArtProps {
 export function PetArt({ species: sp, stage, look, animated = false, className }: PetArtProps) {
   const rawId = useId()
   const gid = 'g' + rawId.replace(/[^a-zA-Z0-9_-]/g, '')
-  const paint = resolvePaint(sp, look.paint, gid)
-  const c = paint.fill
+  const paint = resolvePaint(sp, look.paint)
+  const c = paint.grad ? `url(#${gid})` : paint.fill
   const d = paint.dark
   const pts = bodyPoints(sp.shape)
   const top = Math.min(...pts.map((p) => p[1]))
@@ -149,8 +165,14 @@ export function PetArt({ species: sp, stage, look, animated = false, className }
   const full = stage >= 4
 
   return (
-    <svg viewBox="-12 -56 224 244" role="img" aria-label={sp.name} className={[className, animated ? 'pet-anim' : ''].join(' ')}>
-      <defs>{paint.defs}</defs>
+    <svg viewBox="-12 -56 224 244" role="img" aria-label={sp.name} className={[className, paint.neon ? 'neon' : '', animated ? 'pet-anim' : ''].join(' ')}>
+      {paint.grad && (
+        <defs>
+          <linearGradient id={gid} x1="0" y1="0" x2="0.4" y2="1">
+            <stop offset="0" stopColor={paint.grad[0]} /><stop offset="1" stopColor={paint.grad[1]} />
+          </linearGradient>
+        </defs>
+      )}
       {full && <polygon points={pp(pts)} fill="none" stroke="#FFE45C" strokeWidth={16} strokeLinejoin="round" opacity={0.8} className="pet-aura" />}
       {back}
       <ellipse cx={72} cy={bot} rx={17} ry={9} fill={feetC} stroke={O} strokeWidth={4} />
