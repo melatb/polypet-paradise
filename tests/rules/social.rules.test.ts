@@ -23,14 +23,14 @@ beforeEach(async () => {
   await env.withSecurityRulesDisabled(async (ctx) => {
     const db = ctx.firestore()
     for (const u of ['ana', 'ben', 'cy']) await setDoc(doc(db, `invites/${u}@example.com`), { invitedAt: 1 })
-    await setDoc(doc(db, 'friendCodes/BENCODE2'), { uid: 'ben', createdAt: 1 })
+    await setDoc(doc(db, 'friendCodes/BENKEY22'), { uid: 'ben', createdAt: 1 })
     await setDoc(doc(db, 'showcase/ben'), { familyName: 'Ben family', players: {} })
   })
 })
 
 async function makeFriends() {
   await env.withSecurityRulesDisabled(async (ctx) => {
-    await setDoc(doc(ctx.firestore(), 'friendships/ana_ben'), { members: ['ana', 'ben'], requestedBy: 'ana', status: 'accepted', names: { ana: 'Ana family', ben: 'Ben family' }, code: 'BENCODE2', createdAt: 1 })
+    await setDoc(doc(ctx.firestore(), 'friendships/ana_ben'), { members: ['ana', 'ben'], requestedBy: 'ana', status: 'accepted', names: { ana: 'Ana family', ben: 'Ben family' }, code: 'BENKEY22', createdAt: 1 })
   })
 }
 async function seedTrade(status: string, from = 'ana', to = 'ben') {
@@ -39,29 +39,29 @@ async function seedTrade(status: string, from = 'ana', to = 'ben') {
 
 describe('family settings and friend codes', () => {
   it('a family can save its own name and code, but not another family’s', async () => {
-    await assertSucceeds(setDoc(doc(who('ana'), 'families/ana'), { familyName: 'Ana family', friendCode: 'ANACODE2', updatedAt: 1 }))
+    await assertSucceeds(setDoc(doc(who('ana'), 'families/ana'), { familyName: 'Ana family', friendCode: 'ANAKEY22', updatedAt: 1 }))
     await assertFails(setDoc(doc(who('ana'), 'families/ana'), { familyName: 'x'.repeat(31) }))
     await assertFails(setDoc(doc(who('ana'), 'families/ana'), { familyName: 'Ana', email: 'a@b.c' }))
     await assertFails(setDoc(doc(who('ana'), 'families/ben'), { familyName: 'Hacked' }))
     await assertFails(getDoc(doc(who('ana'), 'families/ben')))
   })
   it('codes can be created for yourself, looked up one at a time, never listed', async () => {
-    await assertSucceeds(setDoc(doc(who('ana'), 'friendCodes/ANACODE2'), { uid: 'ana', createdAt: 1 }))
-    await assertFails(setDoc(doc(who('ana'), 'friendCodes/ANACODE3'), { uid: 'ben', createdAt: 1 }))
+    await assertSucceeds(setDoc(doc(who('ana'), 'friendCodes/ANAKEY22'), { uid: 'ana', createdAt: 1 }))
+    await assertFails(setDoc(doc(who('ana'), 'friendCodes/ANAKEY23'), { uid: 'ben', createdAt: 1 }))
     await assertFails(setDoc(doc(who('ana'), 'friendCodes/bad'), { uid: 'ana', createdAt: 1 }))
-    await assertSucceeds(getDoc(doc(who('ana'), 'friendCodes/BENCODE2')))
+    await assertSucceeds(getDoc(doc(who('ana'), 'friendCodes/BENKEY22')))
     await assertFails(getDocs(collection(who('ana'), 'friendCodes')))
-    await assertFails(deleteDoc(doc(who('ana'), 'friendCodes/BENCODE2')))
-    await assertSucceeds(deleteDoc(doc(who('ben'), 'friendCodes/BENCODE2')))
+    await assertFails(deleteDoc(doc(who('ana'), 'friendCodes/BENKEY22')))
+    await assertSucceeds(deleteDoc(doc(who('ben'), 'friendCodes/BENKEY22')))
   })
   it('people who were not invited cannot look up codes', async () => {
     const zed = env.authenticatedContext('zed', { email: 'zed@example.com', email_verified: true }).firestore()
-    await assertFails(getDoc(doc(zed, 'friendCodes/BENCODE2')))
+    await assertFails(getDoc(doc(zed, 'friendCodes/BENKEY22')))
   })
 })
 
 describe('friend requests', () => {
-  const request = (extra: Record<string, unknown> = {}) => ({ members: ['ana', 'ben'], requestedBy: 'ana', status: 'pending', names: { ana: 'Ana family' }, code: 'BENCODE2', createdAt: 1, ...extra })
+  const request = (extra: Record<string, unknown> = {}) => ({ members: ['ana', 'ben'], requestedBy: 'ana', status: 'pending', names: { ana: 'Ana family' }, code: 'BENKEY22', createdAt: 1, ...extra })
   it('needs the other family’s real friend code', async () => {
     await assertSucceeds(setDoc(doc(who('ana'), 'friendships/ana_ben'), request()))
   })
