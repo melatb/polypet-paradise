@@ -53,6 +53,8 @@ export interface Question {
   table?: RatioTableSpec
   hint: string
   solution: string
+  /** The answer may be negative: show the full keyboard (phone number pads have no minus key). */
+  allowNegative?: boolean
   /** Small note under the answer box, e.g. how to type fractions. */
   inputHint?: string
   /** Extra nudge when the typed answer equals this value (e.g. forgot the ½). */

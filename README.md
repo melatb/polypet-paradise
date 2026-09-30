@@ -36,6 +36,7 @@ src/
     shapes.ts           Builders for unit squares, boxes, prisms, pyramids and nets
     ratioDiagrams.ts    Builders for ratio diagrams, double number lines, tape diagrams, 10×10 grids
     fractions.ts        Exact fraction math, pretty fractions (7½, ²⁰⁄₃) and fraction bar diagrams
+    dataDiagrams.ts     Number lines with negatives, inequality graphs, coordinate plane, dot plots, histograms, box plots
     units/
       index.ts          Registry of playable zones + the Grade 6 roadmap
       g6u1/             Unit 1: area, parallelograms, polygons, surface area
@@ -44,6 +45,9 @@ src/
       g6u4/             Unit 4: meanings of division, dividing fractions, fraction geometry
       g6u5/             Unit 5: adding, multiplying and dividing decimals
       g6u6/             Unit 6: equations, expressions, exponents, relationships
+      g6u7/             Unit 7: negatives, inequalities, coordinate plane, factors and multiples
+      g6u8/             Unit 8: data displays, mean and MAD, median and box plots
+      g6u9/             Unit 9: Fermi problems, voting, and the Grand Review
       questions.test.ts Checks every question generator (also runs before each deploy)
   pets/PetArt.tsx       Pet and egg drawings, colors and outfits
   components/           Yard, question sheet, hatching, panels, HUD
@@ -65,7 +69,7 @@ Each question type has an `unlockLevel` (the player level where it starts appear
 ## Roadmap
 
 - [x] **Phase 1: Foundation.** React + TypeScript. Animations (walking, blinking, hopping, egg cracking, flying coins). Growth-stage colors and outfits with a wardrobe.
-- [ ] **Phase 3: All of Grade 6.** (in progress, done first) Units 1–6 complete: 20 worlds on the world map. Units 7–9 next.
+- [x] **Phase 3: All of Grade 6.** All 9 units: 30 worlds on the world map, including a Grand Review that mixes every question type.
 - [x] **Phase 2: Accounts.** Invitation-only parent accounts (email + password, confirmed email), kid profiles with optional PINs, cloud saves with offline support, and a password-protected family manager.
 - [ ] **Phase 4: Friends and trading.** Friend codes, trade requests, two-sided confirmation, no free-text chat.
 - [ ] **Phase 5: Trimathlons.** Timed competitions with family leaderboards.

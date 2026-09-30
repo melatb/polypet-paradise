@@ -34,7 +34,7 @@ for (const zone of ZONES) {
             expect(new Set(labels).size).toBe(labels.length)
           } else {
             expect(Number.isFinite(q.answer)).toBe(true)
-            expect(q.answer!).toBeGreaterThan(0)
+            if (!q.allowNegative) expect(q.answer!).toBeGreaterThan(0)
             if (q.commonSlip) expect(q.commonSlip.value).not.toBe(q.answer)
           }
           if (q.figure) { checkFigure(q.figure(false)); checkFigure(q.figure(true)) }

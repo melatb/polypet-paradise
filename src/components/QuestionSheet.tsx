@@ -140,7 +140,7 @@ export function QuestionSheet({ question: q, onClose }: Props) {
             </div>
           ) : (
             <form className="ansrow" onSubmit={submit}>
-              <input ref={inputRef} id="answer" inputMode="decimal" autoComplete="off" placeholder="?" aria-label="Your answer"
+              <input ref={inputRef} id="answer" inputMode={q.allowNegative ? 'text' : 'decimal'} autoComplete="off" placeholder="?" aria-label="Your answer"
                 value={value} onChange={(e) => setValue(e.target.value)} />
               <span className="unit">{q.unit}</span>
               <motion.button className="btn" type="submit" whileTap={{ scale: 0.95 }}>Check</motion.button>

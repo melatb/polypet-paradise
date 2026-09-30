@@ -28,6 +28,19 @@ import { exponentQuestionTypes } from './g6u6/exponents'
 import { expressionQuestionTypes } from './g6u6/expressions'
 import { equationLessons, exponentLessons, expressionLessons, relationshipLessons } from './g6u6/lessons'
 import { relationshipQuestionTypes } from './g6u6/relationships'
+import { coordinateQuestionTypes } from './g6u7/coordinates'
+import { factorQuestionTypes } from './g6u7/factors'
+import { inequalityQuestionTypes } from './g6u7/inequalities'
+import { coordinateLessons, factorLessons, inequalityLessons, negativeLessons } from './g6u7/lessons'
+import { negativeQuestionTypes } from './g6u7/negatives'
+import { displayQuestionTypes } from './g6u8/displays'
+import { displayLessons, meanLessons, medianLessons } from './g6u8/lessons'
+import { meanQuestionTypes } from './g6u8/mean'
+import { medianQuestionTypes } from './g6u8/median'
+import { fermiQuestionTypes } from './g6u9/fermi'
+import { fermiLessons, reviewLessons, votingLessons } from './g6u9/lessons'
+import { reviewQuestionTypes } from './g6u9/review'
+import { votingQuestionTypes } from './g6u9/voting'
 
 const IM_CREDIT = 'Math content based on Illustrative Mathematics 6–8 Math v.360 (CC BY-NC 4.0).'
 const U1 = { grade: 6, unit: 1, unitTitle: 'Area and Surface Area', credit: IM_CREDIT }
@@ -36,12 +49,12 @@ const U3 = { grade: 6, unit: 3, unitTitle: 'Unit Rates and Percentages', credit:
 const U4 = { grade: 6, unit: 4, unitTitle: 'Dividing Fractions', credit: IM_CREDIT }
 const U5 = { grade: 6, unit: 5, unitTitle: 'Arithmetic in Base Ten', credit: IM_CREDIT }
 const U6 = { grade: 6, unit: 6, unitTitle: 'Expressions and Equations', credit: IM_CREDIT }
+const U7 = { grade: 6, unit: 7, unitTitle: 'Rational Numbers', credit: IM_CREDIT }
+const U8 = { grade: 6, unit: 8, unitTitle: 'Data Sets and Distributions', credit: IM_CREDIT }
+const U9 = { grade: 6, unit: 9, unitTitle: 'Putting It All Together', credit: IM_CREDIT }
 
-/**
- * Playable zones, in the order they appear on the world map.
- * To add a section: make a folder under units/ and register a zone here.
- */
-export const ZONES: Zone[] = [
+/** One zone per curriculum section. To add a section: make a folder under units/ and register it here. */
+const UNIT_ZONES: Zone[] = [
   { ...U1, id: 'g6u1-area', title: 'Reasoning to Find Area', short: 'Finding Area', blurb: 'Count squares, break shapes apart, move pieces', questionTypes: areaQuestionTypes, lessons: areaLessons },
   { ...U1, id: 'g6u1-parallelograms', title: 'Parallelograms', short: 'Parallelograms', blurb: 'Base times height, and matching heights', questionTypes: parallelogramQuestionTypes, lessons: parallelogramLessons },
   { ...U1, id: 'g6u1-polygons', title: 'Triangles and Other Polygons', short: 'Polygons', blurb: 'Half a parallelogram, and cutting polygons into triangles', questionTypes: polygonQuestionTypes, lessons: polygonLessons },
@@ -62,6 +75,23 @@ export const ZONES: Zone[] = [
   { ...U6, id: 'g6u6-expressions', title: 'Equivalent Expressions', short: 'Expressions', blurb: 'The distributive property', questionTypes: expressionQuestionTypes, lessons: expressionLessons },
   { ...U6, id: 'g6u6-exponents', title: 'Expressions with Exponents', short: 'Exponents', blurb: 'Powers and order of operations', questionTypes: exponentQuestionTypes, lessons: exponentLessons },
   { ...U6, id: 'g6u6-relationships', title: 'Relationships Between Quantities', short: 'Relationships', blurb: 'Tables, equations and graphs', questionTypes: relationshipQuestionTypes, lessons: relationshipLessons },
+  { ...U7, id: 'g6u7-negatives', title: 'Negative Numbers and Absolute Value', short: 'Negative Numbers', blurb: 'Temperatures, elevations and distance from 0', questionTypes: negativeQuestionTypes, lessons: negativeLessons },
+  { ...U7, id: 'g6u7-inequalities', title: 'Inequalities', short: 'Inequalities', blurb: 'Solutions and graphs of x < 1', questionTypes: inequalityQuestionTypes, lessons: inequalityLessons },
+  { ...U7, id: 'g6u7-coordinates', title: 'The Coordinate Plane', short: 'Coordinate Plane', blurb: 'Four quadrants, distances and reflections', questionTypes: coordinateQuestionTypes, lessons: coordinateLessons },
+  { ...U7, id: 'g6u7-factors', title: 'Common Factors and Multiples', short: 'Factors and Multiples', blurb: 'GCF, LCM and no leftovers', questionTypes: factorQuestionTypes, lessons: factorLessons },
+  { ...U8, id: 'g6u8-displays', title: 'Statistical Questions and Displays', short: 'Data Displays', blurb: 'Dot plots and histograms', questionTypes: displayQuestionTypes, lessons: displayLessons },
+  { ...U8, id: 'g6u8-mean', title: 'Mean and MAD', short: 'Mean and MAD', blurb: 'Fair shares and how spread out data is', questionTypes: meanQuestionTypes, lessons: meanLessons },
+  { ...U8, id: 'g6u8-median', title: 'Median and Box Plots', short: 'Median and Box Plots', blurb: 'Middle values, IQR and outliers', questionTypes: medianQuestionTypes, lessons: medianLessons },
+  { ...U9, id: 'g6u9-fermi', title: 'Fermi Problems', short: 'Fermi Problems', blurb: 'Smart estimates for huge numbers', questionTypes: fermiQuestionTypes, lessons: fermiLessons },
+  { ...U9, id: 'g6u9-voting', title: 'Voting', short: 'Voting', blurb: 'Percents, majorities and fair seats', questionTypes: votingQuestionTypes, lessons: votingLessons },
+]
+
+/**
+ * Playable zones, in world-map order. The Grand Review mixes every question type from the other worlds.
+ */
+export const ZONES: Zone[] = [
+  ...UNIT_ZONES,
+  { ...U9, id: 'g6u9-review', title: 'Grand Review', short: 'Grand Review', blurb: 'A mix of everything from Grade 6', questionTypes: reviewQuestionTypes(UNIT_ZONES), lessons: reviewLessons },
 ]
 export const ZONES_BY_ID: Record<string, Zone> = Object.fromEntries(ZONES.map((z) => [z.id, z]))
 

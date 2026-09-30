@@ -133,7 +133,9 @@ export function updatePet(s: GameState, id: string, change: Partial<PetInstance>
 
 /** Accepts "7.5", "7 1/2", "15/2", "7½", "12 sq units". Returns NaN if unreadable. */
 export function parseAnswer(raw: string): number {
-  const s = raw.trim().replace(/½/g, ' 1/2').replace(/,/g, '.').replace(/[a-z²].*$/i, '').replace(/\s+/g, ' ').trim()
+  // "1,000" is a thousands comma; any other comma is a decimal comma ("2,5").
+  const t = raw.trim().replace(/[−–—]/g, '-')
+  const s = (/^-?\d{1,3}(,\d{3})+$/.test(t) ? t.replace(/,/g, '') : t).replace(/½/g, ' 1/2').replace(/,/g, '.').replace(/[a-z²].*$/i, '').replace(/\s+/g, ' ').trim()
   let m = s.match(/^(\d+) (\d+)\/(\d+)$/)
   if (m) return +m[1] + +m[2] / +m[3]
   m = s.match(/^(\d*\.?\d+)\/(\d*\.?\d+)$/)
