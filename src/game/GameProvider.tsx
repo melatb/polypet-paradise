@@ -21,15 +21,21 @@ const Ctx = createContext<GameApi | null>(null)
 
 export function GameProvider({ children, storage = localStorageBackend }: { children: ReactNode; storage?: GameStorage }) {
   const [state, setState] = useState<GameState | null>(null)
+  const [loadError, setLoadError] = useState(false)
+  const [attempt, setAttempt] = useState(0)
   const ref = useRef<GameState | null>(null)
 
   useEffect(() => {
+    setLoadError(false)
     storage.load().then((s) => {
       const init = s ?? rules.freshState()
       ref.current = init
       setState(init)
+    }).catch(() => {
+      // Never start fresh after a failed load: the first save would overwrite real progress.
+      setLoadError(true)
     })
-  }, [storage])
+  }, [storage, attempt])
 
   const commit = useCallback((next: GameState) => {
     ref.current = next
@@ -66,6 +72,12 @@ export function GameProvider({ children, storage = localStorageBackend }: { chil
     }
   }, [state, commit])
 
+  if (loadError) return (
+    <div className="loading">
+      <p>Couldn’t load your pets. Check the internet connection.</p>
+      <button className="btn" onClick={() => setAttempt((n) => n + 1)}>Try again</button>
+    </div>
+  )
   if (!api) return <div className="loading">Loading your pets…</div>
   return <Ctx.Provider value={api}>{children}</Ctx.Provider>
 }

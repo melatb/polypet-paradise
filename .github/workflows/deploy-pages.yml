@@ -33,6 +33,23 @@ jobs:
         with:
           path: dist
 
+  # Checks the Firestore security rules with the Firebase emulator. Separate from the deploy,
+  # so a rules problem is reported without blocking game updates.
+  rules:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - run: npm ci
+      - run: npm run test:rules
+
   deploy:
     needs: build
     runs-on: ubuntu-latest

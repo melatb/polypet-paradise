@@ -17,6 +17,7 @@ npm run build          # production build in dist/ (for Firebase Hosting later)
 npm run build:artifact # single-file preview in dist-single/artifact.html
 npm run typecheck
 npm test               # generates hundreds of problems of every type and checks each one
+npm run test:rules     # tests the Firestore security rules (needs Java; runs in GitHub Actions)
 ```
 
 ## How the code is organized
@@ -27,7 +28,7 @@ src/
     types.ts            Shapes of pets, looks and the saved game
     catalog.ts          Pets, rarities, eggs, needs, growth stages, wardrobe unlocks
     rules.ts            Pure functions: answering, feeding, growing, hatching, levels
-    storage.ts          Where saves live (browser today; Firebase in Phase 2)
+    storage.ts          The GameStorage interface and the on-this-device save
     GameProvider.tsx    React context that connects the rules and storage to the UI
   math/
     types.ts            Question, QuestionType, Lesson and Zone types
@@ -47,6 +48,9 @@ src/
   pets/PetArt.tsx       Pet and egg drawings, colors and outfits
   components/           Yard, question sheet, hatching, panels, HUD
   fx/Fx.tsx             Confetti, flying coins, toasts
+  account/              Family accounts: sign-in, invites, kid profiles, cloud saves (Firestore)
+  firebase/             Firebase config and a lazy client (Firebase only downloads when someone signs in)
+  Root.tsx              Chooses cloud or on-device saves and shows "Who's playing?"
   audio/music.ts        Original background music, synthesized live with the Web Audio API (no audio files)
 ```
 
@@ -62,9 +66,28 @@ Each question type has an `unlockLevel` (the player level where it starts appear
 
 - [x] **Phase 1: Foundation.** React + TypeScript. Animations (walking, blinking, hopping, egg cracking, flying coins). Growth-stage colors and outfits with a wardrobe.
 - [ ] **Phase 3: All of Grade 6.** (in progress, done first) Units 1–6 complete: 20 worlds on the world map. Units 7–9 next.
-- [ ] **Phase 2: Accounts.** Firebase Authentication with invitation-only, parent-managed family accounts. Cloud saves via a Firestore `GameStorage`.
+- [x] **Phase 2: Accounts.** Invitation-only parent accounts (email + password, confirmed email), kid profiles with optional PINs, cloud saves with offline support, and a password-protected family manager.
 - [ ] **Phase 4: Friends and trading.** Friend codes, trade requests, two-sided confirmation, no free-text chat.
 - [ ] **Phase 5: Trimathlons.** Timed competitions with family leaderboards.
+
+## Family accounts (Phase 2)
+
+- **Parents** sign in with email and password. Only emails listed in the Firestore `invites` collection can use the game's cloud features, and the email must be confirmed.
+- **Kids** have no accounts, emails or passwords. They pick a profile on "Who's playing?", optionally protected by a 4-digit PIN (a sibling lock).
+- **Saves** live in `families/{parentUid}/players/{playerId}` and work offline through Firestore's cache.
+- **Without signing in**, the game saves on the device like before. The Claude preview build always works this way.
+
+### Inviting a family
+
+In the Firebase console: **Firestore Database → Data → `invites` → Add document**. Use the parent's email address in **lowercase** as the document ID, and add any field (for example `invitedAt`, type timestamp).
+
+### Security rules
+
+The rules are in `firestore.rules`. To publish them: **Firestore Database → Rules**, paste the file's contents, **Publish**. `npm run test:rules` tests them against the Firebase emulator, and GitHub Actions runs those tests on every push.
+
+### A note on `npm audit`
+
+`npm audit` flags `@grpc/grpc-js`, which Firebase uses only when it runs on a Node.js server. The browser build never includes it, so players aren't affected.
 
 ## Kids' privacy
 

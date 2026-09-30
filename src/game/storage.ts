@@ -14,7 +14,7 @@ const KEY = 'polypet-paradise-v2'
 const OLD_KEY = 'polypet-paradise-v1'
 
 /** Upgrades a save from the single-file version (v1) of the game. */
-function migrate(raw: unknown): GameState | null {
+export function migrate(raw: unknown): GameState | null {
   if (!raw || typeof raw !== 'object') return null
   const d = raw as Record<string, any>
   if (d.version === 2) {

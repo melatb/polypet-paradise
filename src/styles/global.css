@@ -15,7 +15,7 @@ body {
   background-color: var(--bg);
   background-image: radial-gradient(rgba(255,255,255,.35) 2px, transparent 2.5px);
   background-size: 26px 26px;
-  padding-inline: 16px; padding-block: 14px 40px; min-height: 100%;
+  padding-inline: 16px; padding-block: 14px 40px; min-height: 100vh; min-height: 100dvh;
 }
 button { font-family: inherit; color: inherit }
 :focus-visible { outline: 3px solid var(--pink); outline-offset: 2px }
@@ -213,6 +213,49 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
 .mz-l { font-size: 12px; font-weight: 800; color: #B0226A; margin-top: 2px }
 .minis.solids { grid-template-columns: repeat(2, 1fr) }
 .minis.solids div { font-size: 12px }
+
+/* Accounts */
+.family-pill { cursor: pointer; font-size: 16px; padding-right: 12px }
+.fp-name { max-width: 9em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.avatar { display: inline-grid; place-items: center; flex: none }
+.avatar svg { width: 100%; height: 100% }
+.acct-p { margin: 0; font-weight: 600; max-width: 60ch }
+.acct-p.small { font-size: 14px; color: var(--muted) }
+.acct-p.center { text-align: center }
+.acct-form { display: flex; flex-direction: column; gap: 12px }
+.field { display: flex; flex-direction: column; gap: 4px; font-weight: 800; font-size: 14px }
+.field input { font-family: var(--body); font-size: 18px; font-weight: 700; padding: 8px 12px; border: 3px solid var(--ink); border-radius: 12px; background: #FFFBEA; color: var(--ink) }
+.check { display: flex; gap: 8px; align-items: flex-start; font-weight: 700; font-size: 14px }
+.check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--pink) }
+.seg { display: flex; border: 3px solid var(--ink); border-radius: 14px; overflow: hidden }
+.seg button { flex: 1; font-family: var(--display); font-size: 17px; padding: 8px; border: 0; background: #E3EEFB; cursor: pointer }
+.seg button.on { background: var(--sun) }
+.seg button + button { border-left: 3px solid var(--ink) }
+.linkish { align-self: center; background: none; border: 0; font-weight: 800; color: #B0226A; text-decoration: underline; cursor: pointer; font-size: 14px }
+.btn.danger { background: #FF6B5B; color: #fff }
+.picker { min-height: 100%; display: flex; flex-direction: column; align-items: center; gap: 18px; padding-block: 24px }
+.big-logo { font-size: clamp(32px, 7vw, 52px); margin: 0 }
+.picker-card { width: min(720px, 100%); padding: 20px; display: flex; flex-direction: column; gap: 16px; align-items: center }
+.picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; width: 100% }
+.picker-player { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; border: 3px solid var(--ink); border-radius: 18px; background: var(--paper2); padding: 10px 6px; cursor: pointer; box-shadow: 0 4px 0 var(--ink) }
+.picker-player.add { border-style: dashed; background: #fff }
+.pp-name { font-family: var(--display); font-size: 19px; line-height: 1.1; text-align: center; overflow-wrap: anywhere }
+.pp-lock { position: absolute; top: 6px; right: 8px; font-size: 16px }
+.pp-plus { width: 96px; height: 96px; display: grid; place-items: center; font-family: var(--display); font-size: 56px; color: var(--muted) }
+.avatar-pick { display: flex; flex-wrap: wrap; gap: 8px }
+.avatar-opt { border: 3px solid var(--line); border-radius: 14px; background: #fff; padding: 2px; cursor: pointer }
+.avatar-opt.on { border-color: var(--ink); background: #FFF6CC; box-shadow: 0 3px 0 var(--ink) }
+.pin-dots { display: flex; justify-content: center; gap: 14px; padding: 6px }
+.pin-dots span { width: 20px; height: 20px; border-radius: 50%; border: 3px solid var(--ink); background: #fff }
+.pin-dots span.on { background: var(--pink) }
+.pin-dots .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0) }
+.pin-pad { display: grid; grid-template-columns: repeat(3, 72px); gap: 10px; justify-content: center }
+.pin-key { height: 60px; font-family: var(--display); font-size: 26px; border: 3px solid var(--ink); border-radius: 16px; background: var(--paper2); box-shadow: 0 3px 0 var(--ink); cursor: pointer }
+.pin-key.small { font-size: 20px }
+.manage-list { display: flex; flex-direction: column; gap: 10px }
+.manage-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; border: 2px solid var(--line); border-radius: 14px; padding: 8px }
+.manage-row .pp-name { font-size: 18px; margin-right: auto }
+.manage-actions { display: flex; flex-wrap: wrap; gap: 6px }
 
 /* Question sheet */
 .overlay { position: fixed; inset: 0; background: rgba(30,42,74,.55); display: flex; align-items: flex-end; justify-content: center; z-index: 20;

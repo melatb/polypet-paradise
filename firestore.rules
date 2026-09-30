@@ -1,0 +1,52 @@
+rules_version = '2';
+
+// Polypet Paradise security rules.
+// - Only invited parents (an invites/{email} document exists) with a confirmed email can read or write.
+// - A parent can only touch their own family's players.
+// - Invites are managed in the Firebase console; the app can only read your own invite.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function myEmail() {
+      return request.auth.token.email.lower();
+    }
+
+    function invited() {
+      return signedIn()
+        && request.auth.token.email_verified == true
+        && exists(/databases/$(database)/documents/invites/$(myEmail()));
+    }
+
+    function isMe(uid) {
+      return invited() && request.auth.uid == uid;
+    }
+
+    // Only these fields may be stored on a player, with sensible sizes.
+    function validPlayer(data) {
+      return data.keys().hasOnly(['name', 'species', 'pinHash', 'state', 'createdAt', 'updatedAt'])
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 20
+        && data.species is string && data.species.size() <= 32
+        && (data.pinHash == null || (data.pinHash is string && data.pinHash.size() == 64))
+        && (data.state == null || data.state is map);
+    }
+
+    match /invites/{email} {
+      allow read: if signedIn() && myEmail() == email;
+      allow write: if false; // add invites in the Firebase console
+    }
+
+    match /families/{uid}/players/{playerId} {
+      allow read, delete: if isMe(uid);
+      allow create, update: if isMe(uid) && validPlayer(request.resource.data);
+    }
+
+    // Everything else is closed.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

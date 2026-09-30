@@ -19,7 +19,7 @@ const TABS = [
 ] as const
 type Tab = (typeof TABS)[number]['id']
 
-export default function App() {
+export default function App({ onAccount }: { onAccount: () => void }) {
   const game = useGame()
   const [tab, setTab] = useState<Tab>('pets')
   const [question, setQuestion] = useState<Question | null>(null)
@@ -35,7 +35,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Hud onMap={() => setMap(true)} />
+      <Hud onMap={() => setMap(true)} onAccount={onAccount} />
       <div className="main">
         <Yard onSolve={openQuestion} celebrate={celebrate} />
         <section className="panel side">
