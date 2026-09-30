@@ -3,6 +3,9 @@ import { useState } from 'react'
 import { HatchModal } from './components/HatchModal'
 import { Hud } from './components/Hud'
 import { EggShop, LearnPanel, PetsPanel, WardrobePanel } from './components/Panels'
+import { TradePanel } from './components/Trade'
+import { useAccount } from './account/AccountProvider'
+import { useTrade } from './social/TradeProvider'
 import { QuestionSheet } from './components/QuestionSheet'
 import { WorldMap } from './components/WorldMap'
 import { Yard } from './components/Yard'
@@ -16,11 +19,17 @@ const TABS = [
   { id: 'wardrobe', label: 'Wardrobe' },
   { id: 'eggs', label: 'Eggs' },
   { id: 'learn', label: 'Learn' },
+  { id: 'trade', label: 'Trade' },
 ] as const
 type Tab = (typeof TABS)[number]['id']
 
 export default function App({ onAccount }: { onAccount: () => void }) {
   const game = useGame()
+  const acct = useAccount()
+  const trade = useTrade()
+  const offers = trade?.incoming.length ?? 0
+  // The Claude preview has no accounts, so no trading tab there.
+  const tabs = acct.status === 'off' ? TABS.filter((t) => t.id !== 'trade') : TABS
   const [tab, setTab] = useState<Tab>('pets')
   const [question, setQuestion] = useState<Question | null>(null)
   const [celebrate, setCelebrate] = useState(0)
@@ -39,10 +48,11 @@ export default function App({ onAccount }: { onAccount: () => void }) {
       <div className="main">
         <Yard onSolve={openQuestion} celebrate={celebrate} />
         <section className="panel side">
-          <div className="tabs" role="tablist">
-            {TABS.map((t) => (
+          <div className={'tabs' + (tabs.length > 4 ? ' five' : '')} role="tablist">
+            {tabs.map((t) => (
               <button key={t.id} className="tab" role="tab" aria-selected={tab === t.id} onClick={() => setTab(t.id)}>
                 {t.label}
+                {t.id === 'trade' && offers > 0 && <span className="tab-badge" aria-label={`${offers} new offers`}>{offers}</span>}
                 {tab === t.id && <motion.span layoutId="tab-under" className="tab-under" />}
               </button>
             ))}
@@ -54,6 +64,7 @@ export default function App({ onAccount }: { onAccount: () => void }) {
               {tab === 'wardrobe' && <WardrobePanel />}
               {tab === 'eggs' && <EggShop onBuy={buy} />}
               {tab === 'learn' && <LearnPanel onMap={() => setMap(true)} />}
+              {tab === 'trade' && <TradePanel />}
             </motion.div>
           </AnimatePresence>
         </section>

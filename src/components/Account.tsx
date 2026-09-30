@@ -6,16 +6,17 @@ import { SPECIES, SPECIES_BY_ID } from '../game/catalog'
 import { localStorageBackend } from '../game/storage'
 import type { GameState } from '../game/types'
 import { PetArt } from '../pets/PetArt'
+import { FriendsManager } from './Friends'
 
 const PLAIN = { paint: 'natural', hat: 'none', neck: 'none' } as const
 const IMPORTED_KEY = 'polypet-local-imported'
 
-function Avatar({ species, size = 72 }: { species: string; size?: number }) {
+export function Avatar({ species, size = 72 }: { species: string; size?: number }) {
   const sp = SPECIES_BY_ID[species] ?? SPECIES[0]
   return <span className="avatar" style={{ width: size, height: size }}><PetArt species={sp} stage={0} look={PLAIN} /></span>
 }
 
-function Sheet({ title, sub, onClose, children, wide }: { title: string; sub?: string; onClose?: () => void; children: ReactNode; wide?: boolean }) {
+export function Sheet({ title, sub, onClose, children, wide }: { title: string; sub?: string; onClose?: () => void; children: ReactNode; wide?: boolean }) {
   useEffect(() => {
     if (!onClose) return
     const k = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
@@ -37,7 +38,7 @@ function Sheet({ title, sub, onClose, children, wide }: { title: string; sub?: s
   )
 }
 
-function useBusy() {
+export function useBusy() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [note, setNote] = useState('')
@@ -280,6 +281,7 @@ export function ManageFamily({ onClose }: { onClose: () => void }) {
         </div>
         {b.error && <div className="fb-box fb-bad">{b.error}</div>}
         {b.note && <div className="fb-box fb-good">{b.note}</div>}
+        <FriendsManager />
         <div className="sheet-actions"><button className="btn sm white" onClick={() => { void acct.signOut(); onClose() }}>Sign out of this device</button></div>
       </Sheet>
       <AnimatePresence>

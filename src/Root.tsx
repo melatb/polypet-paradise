@@ -6,6 +6,8 @@ import { cloudStorage } from './account/players'
 import { AccountSheet, ManageFamily, PlayerPicker } from './components/Account'
 import { GameProvider } from './game/GameProvider'
 import { localStorageBackend } from './game/storage'
+import { SocialProvider } from './social/SocialProvider'
+import { TradeProvider } from './social/TradeProvider'
 
 /**
  * Picks where the game is saved: the cloud for a signed-in family's chosen player,
@@ -27,13 +29,16 @@ export function Root() {
   )
 
   if (acct.status === 'loading') return <div className="loading">Loading…</div>
-  if (acct.status === 'ready' && !acct.active) return <><PlayerPicker onManage={() => setSheet('manage')} />{sheets}</>
   return (
-    <>
-      <GameProvider key={key} storage={storage}>
-        <App onAccount={() => setSheet('account')} />
-      </GameProvider>
+    <SocialProvider>
+      {acct.status === 'ready' && !acct.active
+        ? <PlayerPicker onManage={() => setSheet('manage')} />
+        : <GameProvider key={key} storage={storage}>
+            <TradeProvider>
+              <App onAccount={() => setSheet('account')} />
+            </TradeProvider>
+          </GameProvider>}
       {sheets}
-    </>
+    </SocialProvider>
   )
 }

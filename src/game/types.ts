@@ -55,4 +55,6 @@ export interface GameState {
   lastQuestionType?: string
   /** Current unit/section zone, e.g. "g6u1-polygons". */
   zoneId: string
+  /** Ids of trades already applied to this save, so a trade never happens twice. */
+  appliedTrades?: string[]
 }

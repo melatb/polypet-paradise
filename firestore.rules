@@ -4,6 +4,8 @@ rules_version = '2';
 // - Only invited parents (an invites/{email} document exists) with a confirmed email can read or write.
 // - A parent can only touch their own family's players.
 // - Invites are managed in the Firebase console; the app can only read your own invite.
+// - Families become friends with a secret friend code; only friends can see each other's pets.
+// - Kids trade pets only with friend families (or siblings). There is no chat anywhere.
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -34,6 +36,28 @@ service cloud.firestore {
         && (data.state == null || data.state is map);
     }
 
+    // Same id from both sides; matches pairId() in src/social/model.ts.
+    function pairId(a, b) {
+      return a < b ? a + '_' + b : b + '_' + a;
+    }
+
+    function friends(a, b) {
+      let path = /databases/$(database)/documents/friendships/$(pairId(a, b));
+      return exists(path) && get(path).data.status == 'accepted';
+    }
+
+    function canTrade(a, b) {
+      return a == b || friends(a, b);
+    }
+
+    function familyName(n) {
+      return n is string && n.size() > 0 && n.size() <= 30;
+    }
+
+    function changesOnly(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
     match /invites/{email} {
       allow read: if signedIn() && myEmail() == email;
       allow write: if false; // add invites in the Firebase console
@@ -42,6 +66,117 @@ service cloud.firestore {
     match /families/{uid}/players/{playerId} {
       allow read, delete: if isMe(uid);
       allow create, update: if isMe(uid) && validPlayer(request.resource.data);
+    }
+
+    // A family's own settings: its display name and current friend code.
+    match /families/{uid} {
+      allow read, delete: if isMe(uid);
+      allow create, update: if isMe(uid)
+        && request.resource.data.keys().hasOnly(['familyName', 'friendCode', 'updatedAt'])
+        && (!('familyName' in request.resource.data) || familyName(request.resource.data.familyName))
+        && (!('friendCode' in request.resource.data) || request.resource.data.friendCode is string);
+    }
+
+    // Friend codes: anyone invited can look up a code they were given, but nobody can list them.
+    match /friendCodes/{code} {
+      allow get: if invited();
+      allow create: if invited()
+        && code.matches('^[A-HJKMNP-Z2-9]{8}$')
+        && request.resource.data.keys().hasOnly(['uid', 'createdAt'])
+        && request.resource.data.uid == request.auth.uid;
+      allow delete: if invited() && resource.data.uid == request.auth.uid;
+    }
+
+    // Friendships: one family sends a request using the other's friend code; the other accepts.
+    function validFriendRequest(id) {
+      let d = request.resource.data;
+      let other = d.members[0] == request.auth.uid ? d.members[1] : d.members[0];
+      return d.keys().hasOnly(['members', 'requestedBy', 'status', 'names', 'code', 'createdAt'])
+        && d.members is list && d.members.size() == 2
+        && d.members[0] < d.members[1]
+        && request.auth.uid in d.members
+        && id == d.members[0] + '_' + d.members[1]
+        && d.requestedBy == request.auth.uid
+        && d.status == 'pending'
+        && d.names is map && d.names.keys().hasOnly([request.auth.uid]) && familyName(d.names[request.auth.uid])
+        && d.code is string
+        && get(/databases/$(database)/documents/friendCodes/$(d.code)).data.uid == other;
+    }
+
+    function acceptingFriend() {
+      let d = request.resource.data;
+      let r = resource.data;
+      return request.auth.uid in r.members
+        && request.auth.uid != r.requestedBy
+        && r.status == 'pending' && d.status == 'accepted'
+        && changesOnly(['status', 'names'])
+        && d.names.diff(r.names).affectedKeys().hasOnly([request.auth.uid])
+        && familyName(d.names[request.auth.uid]);
+    }
+
+    match /friendships/{id} {
+      allow get: if invited() && (resource == null || request.auth.uid in resource.data.members);
+      allow list: if invited() && request.auth.uid in resource.data.members;
+      allow create: if invited() && validFriendRequest(id);
+      allow update: if invited() && acceptingFriend();
+      allow delete: if invited() && request.auth.uid in resource.data.members;
+    }
+
+    // Showcase: the pets each kid has, so friends can pick what to ask for. No PINs, no coins.
+    match /showcase/{uid} {
+      allow read: if isMe(uid) || (invited() && friends(request.auth.uid, uid));
+      allow create, update: if isMe(uid)
+        && request.resource.data.keys().hasOnly(['familyName', 'players', 'updatedAt'])
+        && (!('familyName' in request.resource.data) || familyName(request.resource.data.familyName))
+        && (!('players' in request.resource.data) || request.resource.data.players is map);
+      allow delete: if isMe(uid);
+    }
+
+    // Trades: offered -> accepted -> done, or offered -> declined / cancelled.
+    function validSide(s) {
+      return s is map
+        && s.keys().hasOnly(['uid', 'playerId', 'name', 'species', 'pets'])
+        && s.uid is string && s.playerId is string
+        && s.name is string && s.name.size() > 0 && s.name.size() <= 20
+        && s.species is string && s.species.size() <= 32
+        && s.pets is list && s.pets.size() >= 1 && s.pets.size() <= 4;
+    }
+
+    function validOffer() {
+      let d = request.resource.data;
+      return d.keys().hasOnly(['members', 'from', 'to', 'status', 'createdAt', 'updatedAt'])
+        && d.status == 'offered'
+        && validSide(d.from) && validSide(d.to)
+        && d.from.uid == request.auth.uid
+        && d.members == [d.from.uid, d.to.uid]
+        && canTrade(d.from.uid, d.to.uid);
+    }
+
+    function moving(from, to, who) {
+      return resource.data.status == from
+        && request.resource.data.status == to
+        && request.auth.uid == who;
+    }
+
+    function tradeUpdate() {
+      let d = request.resource.data;
+      let r = resource.data;
+      return (moving('offered', 'accepted', r.to.uid)
+          && changesOnly(['status', 'to', 'updatedAt'])
+          && d.to.diff(r.to).affectedKeys().hasOnly(['pets'])
+          && d.to.pets is list && d.to.pets.size() == r.to.pets.size()
+          && canTrade(r.from.uid, r.to.uid))
+        || (moving('offered', 'declined', r.to.uid) && changesOnly(['status', 'updatedAt']))
+        || (moving('offered', 'cancelled', r.from.uid) && changesOnly(['status', 'updatedAt']))
+        || (moving('accepted', 'done', r.from.uid) && changesOnly(['status', 'updatedAt']));
+    }
+
+    match /trades/{id} {
+      allow read: if invited() && request.auth.uid in resource.data.members;
+      allow create: if invited() && validOffer();
+      allow update: if invited() && request.auth.uid in resource.data.members && tradeUpdate();
+      allow delete: if invited() && request.auth.uid in resource.data.members
+        && resource.data.status in ['declined', 'cancelled', 'done'];
     }
 
     // Everything else is closed.

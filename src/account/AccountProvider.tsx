@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { getFirebase } from '../firebase/client'
 import { ACCOUNTS_ENABLED } from '../firebase/config'
 import type { GameState } from '../game/types'
+import { unpublishPlayer } from '../social/api'
 import { createPlayer, deletePlayer, listPlayers, setPlayerPin, type Player } from './players'
 
 /**
@@ -149,6 +150,7 @@ export function AccountProvider({ children }: { children: ReactNode }) {
     async removePlayer(id) {
       if (!user) return
       await deletePlayer(user.uid, id)
+      await unpublishPlayer(user.uid, id)
       setPlayers((ps) => ps.filter((p) => p.id !== id))
       if (activeId === id) { writeActive(user.uid, null); setActiveId(null) }
     },

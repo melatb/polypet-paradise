@@ -6,12 +6,14 @@ import type { HatId, Look, NeckId, PaintId, Rarity, Stage } from '../game/types'
 import { useFx } from '../fx/Fx'
 import { ZONES_BY_ID } from '../math/units'
 import { EggArt, PetArt } from '../pets/PetArt'
+import { useTrade } from '../social/TradeProvider'
 import { CoinIcon, RarityChip } from './CoinIcon'
 import { RarityIcon } from './RarityIcon'
 
 /* ---------- Pets ---------- */
 export function PetsPanel() {
   const { state, setActive } = useGame()
+  const locked = useTrade()?.locked
   const owned = new Set(state.pets.map((p) => p.species))
   return (
     <>
@@ -19,13 +21,15 @@ export function PetsPanel() {
       <div className="petgrid">
         {state.pets.map((p) => {
           const sp = SPECIES_BY_ID[p.species]
+          const away = locked?.has(p.id)
           return (
-            <motion.button key={p.id} layout className={'petcard' + (p.id === state.activeId ? ' active' : '')} onClick={() => setActive(p.id)}
+            <motion.button key={p.id} layout className={'petcard' + (p.id === state.activeId ? ' active' : '') + (away ? ' away' : '')} onClick={() => { if (!away) setActive(p.id) }}
+              aria-disabled={away} title={away ? 'Waiting in a trade offer' : undefined}
               whileHover={{ y: -3 }} whileTap={{ scale: 0.95 }}>
               <PetArt species={sp} stage={p.stage} look={p.look} />
               <span className="pn">{sp.name}</span>
               <RarityChip rarity={sp.rarity} />
-              <span className="ps">{STAGES[p.stage]}</span>
+              <span className="ps">{away ? 'In a trade offer' : STAGES[p.stage]}</span>
             </motion.button>
           )
         })}

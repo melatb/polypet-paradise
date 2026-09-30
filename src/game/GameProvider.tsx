@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { EggId } from './catalog'
+import { applyTrade } from '../social/model'
 import * as rules from './rules'
 import { localStorageBackend, type GameStorage } from './storage'
 import type { GameState, PetInstance } from './types'
@@ -15,6 +16,10 @@ interface GameApi {
   setActive: (id: string) => void
   updatePet: (id: string, change: Partial<PetInstance>) => void
   setZone: (zoneId: string) => void
+  /** Swaps pets for a trade. Returns false if this save already had the trade. */
+  applyTrade: (tradeId: string, give: readonly string[], receive: readonly unknown[]) => boolean
+  /** Saves right away instead of waiting for the next batched save. */
+  persist: () => Promise<void>
 }
 
 const Ctx = createContext<GameApi | null>(null)
@@ -69,8 +74,15 @@ export function GameProvider({ children, storage = localStorageBackend }: { chil
       setActive: (id) => commit({ ...cur(), activeId: id }),
       updatePet: (id, change) => commit(rules.updatePet(cur(), id, change)),
       setZone: (zoneId) => commit(rules.setZone(cur(), zoneId)),
+      applyTrade: (tradeId, give, receive) => {
+        const next = applyTrade(cur(), tradeId, give, receive)
+        if (next === cur()) return false
+        commit(next)
+        return true
+      },
+      persist: () => storage.flush?.() ?? Promise.resolve(),
     }
-  }, [state, commit])
+  }, [state, commit, storage])
 
   if (loadError) return (
     <div className="loading">

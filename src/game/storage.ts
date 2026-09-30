@@ -8,6 +8,8 @@ import type { GameState, PetInstance } from './types'
 export interface GameStorage {
   load(): Promise<GameState | null>
   save(state: GameState): Promise<void>
+  /** Writes any batched save right away. */
+  flush?(): Promise<void>
 }
 
 const KEY = 'polypet-paradise-v2'

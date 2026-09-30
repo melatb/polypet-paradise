@@ -49,6 +49,7 @@ function readDotPlot(): Question {
     : ask === 'mode' ? 'The dot plot shows how many books students read this month. What number of books was most common?'
     : 'The dot plot shows how many books students read this month. How many students answered?'
   const answer = ask === 'atLeast' ? vals.filter((v) => v >= k).length : ask === 'mode' ? modes[0] : vals.length
+  if (answer === 0) return readDotPlot()
   return {
     name: 'Dot plot',
     prompt, answer,

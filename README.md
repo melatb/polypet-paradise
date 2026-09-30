@@ -71,7 +71,7 @@ Each question type has an `unlockLevel` (the player level where it starts appear
 - [x] **Phase 1: Foundation.** React + TypeScript. Animations (walking, blinking, hopping, egg cracking, flying coins). Growth-stage colors and outfits with a wardrobe.
 - [x] **Phase 3: All of Grade 6.** All 9 units: 30 worlds on the world map, including a Grand Review that mixes every question type.
 - [x] **Phase 2: Accounts.** Invitation-only parent accounts (email + password, confirmed email), kid profiles with optional PINs, cloud saves with offline support, and a password-protected family manager.
-- [ ] **Phase 4: Friends and trading.** Friend codes, trade requests, two-sided confirmation, no free-text chat.
+- [x] **Phase 4: Friends and trading.** Friend codes, trade offers with a fair-trade meter, two-sided confirmation, no chat.
 - [ ] **Phase 5: Trimathlons.** Timed competitions with family leaderboards.
 
 ## Family accounts (Phase 2)
@@ -89,10 +89,19 @@ In the Firebase console: **Firestore Database → Data → `invites` → Add doc
 
 The rules are in `firestore.rules`. To publish them: **Firestore Database → Rules**, paste the file's contents, **Publish**. `npm run test:rules` tests them against the Firebase emulator, and GitHub Actions runs those tests on every push.
 
+## Friends and trading (Phase 4)
+
+- **Grown-ups add friends** in Manage family (behind the password check). Each family gets a secret 8-character friend code to share in person or by text. The other family's grown-up enters it, and the first family accepts. Nobody can search for families or kids.
+- **Kids trade** with brothers and sisters, and with the kids in friend families. They pick pets on both sides, and a fair-trade meter counts points: a Dot is worth 1, a Line 2, a Plane 4, a Solid 8 and a Tesseract 16 (the corners of each dimension's cube), times the stage (Baby ×1 up to Full Grown ×5).
+- **Both kids say yes.** The sender confirms the offer and their pets wait at home (locked) until it's answered. The other kid confirms to accept. Pets swap on the accepting kid's device right away, and on the sender's device the next time they play.
+- **No server needed.** Security rules let each family change only its own saves. Each save remembers which trades it has applied, so a trade can't happen twice, and pets from other families are checked before they're added.
+- **What friends see:** the family name, each kid's first name and avatar, and their pets. No coins, PINs, progress or emails.
+- **Data:** `families/{uid}` (family name, friend code), `friendCodes/{code}`, `friendships/{uidA_uidB}`, `showcase/{uid}` (pets on show) and `trades/{id}`.
+
 ### A note on `npm audit`
 
 `npm audit` flags `@grpc/grpc-js`, which Firebase uses only when it runs on a Node.js server. The browser build never includes it, so players aren't affected.
 
 ## Kids' privacy
 
-Players are family and invited guests only. Phase 2 accounts will be created and managed by a parent. The app should not collect personal information from children beyond a display name, and social features stay limited to invited players.
+Players are family and invited guests only. Accounts are created and managed by a parent. The app collects no personal information from children beyond a first name. Trading is limited to siblings and friend families a grown-up approved, and there is no chat or free text between families.

@@ -114,6 +114,7 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
   padding: 8px 4px 6px; background: #E3EEFB; cursor: pointer; margin-bottom: -3px }
 .tab[aria-selected="true"] { background: #fff; padding-bottom: 9px }
 @media (max-width: 440px) { .tab { font-size: 14px; padding-inline: 2px } .tabs { gap: 4px; padding-inline: 6px } }
+@media (max-width: 440px) { .tabs.five .tab { font-size: 12.5px; padding-inline: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap } .tabs.five { gap: 3px; padding-inline: 4px } }
 .tab-under { position: absolute; left: 20%; right: 20%; bottom: 3px; height: 4px; border-radius: 4px; background: var(--pink) }
 .tabpanel { padding: 16px; display: flex; flex-direction: column; gap: 14px }
 .h3 { font-family: var(--display); font-size: 22px; margin: 0; line-height: 1.1; font-weight: 400 }
@@ -312,3 +313,57 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition: none !important }
 }
+
+/* Trading */
+.tab-badge { position: absolute; top: -8px; right: -4px; min-width: 22px; height: 22px; padding: 0 5px; border-radius: 11px; background: var(--pink); color: #fff; border: 2px solid var(--ink); font-family: var(--display); font-size: 13px; line-height: 18px }
+.petcard.away { opacity: .55; cursor: default; box-shadow: none }
+.trade-off { display: flex; flex-direction: column; gap: 8px }
+.trade-sec { display: flex; flex-direction: column; gap: 10px }
+.trade-empty { border: 2px dashed #9DB5D3; border-radius: 14px; padding: 12px }
+.partner-group { display: flex; flex-direction: column; gap: 6px }
+.partners { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px }
+.partner { display: flex; flex-direction: column; align-items: center; gap: 2px; border: 3px solid var(--ink); border-radius: 16px; background: var(--paper2); padding: 8px 6px; cursor: pointer; box-shadow: 0 3px 0 var(--ink) }
+.partner .pp-name { font-size: 17px }
+.tpets { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 8px }
+.tpet { position: relative; display: flex; flex-direction: column; align-items: center; gap: 0; border: 3px solid var(--ink); border-radius: 14px; background: var(--paper2); padding: 4px 4px 6px; text-align: center }
+.tpet > svg { width: 72px; height: 72px }
+.tp-m .rar-ico, .tp-m svg { width: 13px; height: 13px }
+.tpet.pick { cursor: pointer; box-shadow: 0 3px 0 var(--ink) }
+.tpet.on { background: #FFF6CC; outline: 3px solid var(--pink); outline-offset: -7px }
+.tpet:disabled { cursor: not-allowed; box-shadow: none; border-color: #9AA6BD }
+.tpet:disabled > svg { filter: grayscale(1) opacity(.4) }
+.tp-n { font-family: var(--display); font-size: 14px; line-height: 1.1 }
+.tp-m { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 800; color: var(--muted) }
+.tp-pts { font-size: 11px; font-weight: 800; background: #fff; border: 2px solid var(--ink); border-radius: 8px; padding: 0 6px; margin-top: 2px }
+.tp-note { position: absolute; top: 30%; left: 50%; translate: -50% 0; background: var(--ink); color: #fff; border-radius: 8px; padding: 0 6px; font-size: 11px; font-weight: 800; white-space: nowrap }
+.offer { display: flex; flex-direction: column; gap: 10px; border: 3px solid var(--ink); border-radius: 18px; padding: 12px; background: #FFFDF2; box-shadow: 0 4px 0 var(--ink) }
+.offer.waiting { background: var(--paper2) }
+.offer.declined { background: #F3F3F7 }
+.offer-head { display: flex; align-items: center; gap: 8px; font-weight: 700 }
+.offer-head b { font-family: var(--display); font-weight: 400; font-size: 18px }
+.offer-sides { display: grid; grid-template-columns: 1fr auto 1fr; gap: 6px; align-items: start }
+.offer-sides > div { display: flex; flex-direction: column; gap: 6px; min-width: 0 }
+.offer-sides .tpets { grid-template-columns: repeat(auto-fill, minmax(84px, 1fr)) }
+.offer-arrow { font-family: var(--display); font-size: 28px; align-self: center; color: var(--pink) }
+.offer-q { font-weight: 800; align-self: center }
+.offer-q.muted { color: var(--muted); font-size: 14px }
+.fair { display: flex; flex-direction: column; gap: 6px; border: 2px solid var(--line); border-radius: 14px; padding: 8px 10px; background: #fff }
+.fair-nums { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font-weight: 800; font-size: 14px; white-space: nowrap }
+.fair-nums b { font-family: var(--display); font-weight: 400; font-size: 20px }
+.fair-verdict { font-family: var(--display); font-size: 17px; text-align: center; margin-top: -2px }
+.fair-verdict.fair { color: #1E8F5E }
+.fair-verdict.good, .fair-verdict.bad { color: #B06B00 }
+.fair-verdict.great, .fair-verdict.awful { color: #C2412E }
+.fair-bar { position: relative; height: 16px; border-radius: 10px; border: 2px solid var(--ink); background: linear-gradient(90deg, #FF8A5B, #FFD23F 30%, #4FD6A5 45%, #4FD6A5 55%, #FFD23F 70%, #FF8A5B) }
+.fair-bar i { position: absolute; top: -6px; width: 8px; height: 24px; margin-left: -4px; border-radius: 4px; background: var(--ink); border: 2px solid #fff }
+.fair-how { font-size: 13px; font-weight: 600; color: var(--muted) }
+.fair-how summary { cursor: pointer; font-weight: 800 }
+@media (max-width: 340px) {
+  .offer-sides { grid-template-columns: 1fr }
+  .offer-arrow { rotate: 90deg; justify-self: center }
+}
+.friends { display: flex; flex-direction: column; gap: 12px; border-top: 3px dashed var(--line); padding-top: 12px }
+.friends-box { display: flex; flex-direction: column; gap: 8px; border: 2px solid var(--line); border-radius: 14px; padding: 10px }
+.friends-row { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px }
+.field.grow { flex: 1 1 200px }
+.friend-code { font-family: var(--display); font-size: 26px; letter-spacing: 2px; background: #FFF6CC; border: 3px solid var(--ink); border-radius: 12px; padding: 2px 12px; font-variant-numeric: tabular-nums }
