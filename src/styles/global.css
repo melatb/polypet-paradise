@@ -229,6 +229,7 @@ svg.galactic.pet-anim { animation: galactic 4s linear infinite }
 .prompt { margin: 0; font-size: 19px; font-weight: 700; line-height: 1.35; text-wrap: balance }
 .ansrow { display: flex; gap: 8px; align-items: center; flex-wrap: wrap }
 .ansrow input { font-family: var(--display); font-size: 24px; width: 140px; padding: 8px 12px; border: 3px solid var(--ink); border-radius: 14px; background: #FFFBEA; color: var(--ink) }
+.ansrow .input-hint { flex-basis: 100%; font-size: 13px; font-weight: 700; color: var(--muted) }
 .ansrow .unit { font-weight: 800; color: var(--muted) }
 .ansrow .btn { margin-left: auto }
 .mc { display: grid; grid-template-columns: 1fr 1fr; gap: 10px }

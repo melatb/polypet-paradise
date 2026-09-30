@@ -14,6 +14,8 @@ export interface FigureSpec {
   segs?: FigSeg[]
   marks?: FigMark[]
   labels?: FigLabel[]
+  /** Points drawn on top of everything else (graphs). */
+  dots?: { x: number; y: number; color?: string }[]
   alt: string
 }
 
@@ -51,6 +53,8 @@ export interface Question {
   table?: RatioTableSpec
   hint: string
   solution: string
+  /** Small note under the answer box, e.g. how to type fractions. */
+  inputHint?: string
   /** Extra nudge when the typed answer equals this value (e.g. forgot the ½). */
   commonSlip?: { value: number; message: string }
 }

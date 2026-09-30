@@ -144,6 +144,7 @@ export function QuestionSheet({ question: q, onClose }: Props) {
                 value={value} onChange={(e) => setValue(e.target.value)} />
               <span className="unit">{q.unit}</span>
               <motion.button className="btn" type="submit" whileTap={{ scale: 0.95 }}>Check</motion.button>
+              {q.inputHint && <span className="input-hint">{q.inputHint}</span>}
             </form>
           ))}
 

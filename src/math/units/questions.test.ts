@@ -9,6 +9,7 @@ function checkFigure(spec: FigureSpec) {
   for (const p of spec.polys ?? []) for (const q of p.pts) nums.push(...q)
   for (const s of spec.segs ?? []) nums.push(...s.a, ...s.b)
   for (const m of spec.marks ?? []) nums.push(...m.p, ...m.dx, ...m.dy)
+  for (const d of spec.dots ?? []) nums.push(d.x, d.y)
   for (const l of spec.labels ?? []) { nums.push(l.x, l.y); expect(String(l.t)).not.toMatch(/NaN|undefined|Infinity/) }
   for (const n of nums) expect(Number.isFinite(n)).toBe(true)
   expect(spec.x1).toBeGreaterThan(spec.x0)

@@ -34,11 +34,15 @@ src/
     Figure.tsx          Draws grid diagrams from plain data
     shapes.ts           Builders for unit squares, boxes, prisms, pyramids and nets
     ratioDiagrams.ts    Builders for ratio diagrams, double number lines, tape diagrams, 10×10 grids
+    fractions.ts        Exact fraction math, pretty fractions (7½, ²⁰⁄₃) and fraction bar diagrams
     units/
       index.ts          Registry of playable zones + the Grade 6 roadmap
       g6u1/             Unit 1: area, parallelograms, polygons, surface area
       g6u2/             Unit 2: ratios, double number lines, tables and tape diagrams
       g6u3/             Unit 3: measurement, unit rates, percentages
+      g6u4/             Unit 4: meanings of division, dividing fractions, fraction geometry
+      g6u5/             Unit 5: adding, multiplying and dividing decimals
+      g6u6/             Unit 6: equations, expressions, exponents, relationships
       questions.test.ts Checks every question generator (also runs before each deploy)
   pets/PetArt.tsx       Pet and egg drawings, colors and outfits
   components/           Yard, question sheet, hatching, panels, HUD
@@ -57,7 +61,7 @@ Each question type has an `unlockLevel` (the player level where it starts appear
 ## Roadmap
 
 - [x] **Phase 1: Foundation.** React + TypeScript. Animations (walking, blinking, hopping, egg cracking, flying coins). Growth-stage colors and outfits with a wardrobe.
-- [ ] **Phase 3: All of Grade 6.** (in progress, done first) Units 1–3 complete: 10 worlds on the world map. Units 4–9 next.
+- [ ] **Phase 3: All of Grade 6.** (in progress, done first) Units 1–6 complete: 20 worlds on the world map. Units 7–9 next.
 - [ ] **Phase 2: Accounts.** Firebase Authentication with invitation-only, parent-managed family accounts. Cloud saves via a Firestore `GameStorage`.
 - [ ] **Phase 4: Friends and trading.** Friend codes, trade requests, two-sided confirmation, no free-text chat.
 - [ ] **Phase 5: Trimathlons.** Timed competitions with family leaderboards.

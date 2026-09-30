@@ -50,6 +50,9 @@ export function Figure({ spec }: { spec: FigureSpec }) {
         const d: Pt = [m.p[0] + m.dy[0] * k, m.p[1] + m.dy[1] * k]
         return <polyline key={'m' + i} points={pts([a, b, d])} fill="none" stroke={m.color ?? INK} strokeWidth={2.2} />
       })}
+      {spec.dots?.map((d, i) => (
+        <circle key={'d' + i} cx={X(d.x)} cy={Y(d.y)} r={6} fill={d.color ?? '#FF5FA8'} stroke={INK} strokeWidth={2} />
+      ))}
       {spec.labels?.map((l, i) => (
         <text key={'l' + i} x={X(l.x)} y={Y(l.y)} textAnchor={l.anchor ?? 'middle'} dominantBaseline="middle" className={l.small ? 'flabel small' : 'flabel'}
           fill={l.color ?? INK} paintOrder="stroke" stroke="#fff" strokeWidth={5} strokeLinejoin="round">{l.t}</text>
